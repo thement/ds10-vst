@@ -20,6 +20,7 @@ const double parameterStep = 0.001;
 
 enum EParams
 {
+	kNumParams = 20,
   // Oscillator Section:
   mOsc1Waveform = 0,
   mOsc1PitchMod,
@@ -45,7 +46,6 @@ enum EParams
   mFilterEnvDecay,
   mFilterEnvSustain,
   mFilterEnvRelease,
-  kNumParams
 };
 
 typedef struct {
@@ -57,27 +57,28 @@ typedef struct {
   const double maxVal;
 } parameterProperties_struct;
 
-const parameterProperties_struct parameterProperties[kNumParams] = {
-  {"Osc 1 Waveform", 30, 75},
-  {"Osc 1 Pitch Mod", 69, 61, 0.0, 0.0, 1.0},
-  {"Osc 2 Waveform", 203, 75},
-  {"Osc 2 Pitch Mod", 242, 61, 0.0, 0.0, 1.0},
-  {"Osc Mix", 130, 61, 0.5, 0.0, 1.0},
-  {"Filter Mode", 30, 188},
-  {"Filter Cutoff", 69, 174, 0.99, 0.0, 0.99},
-  {"Filter Resonance", 124, 174, 0.0, 0.0, 1.0},
-  {"Filter LFO Amount", 179, 174, 0.0, 0.0, 1.0},
-  {"Filter Envelope Amount", 234, 174, 0.0, -1.0, 1.0},
-  {"LFO Waveform", 30, 298},
-  {"LFO Frequency", 69, 284, 6.0, 0.01, 30.0},
-  {"Volume Env Attack", 323, 61, 0.01, 0.01, 10.0},
-  {"Volume Env Decay", 378, 61, 0.5, 0.01, 15.0},
-  {"Volume Env Sustain", 433, 61, 0.1, 0.001, 1.0},
-  {"Volume Env Release", 488, 61, 1.0, 0.01, 15.0},
-  {"Filter Env Attack", 323, 174, 0.01, 0.01, 10.0},
-  {"Filter Env Decay", 378, 174, 0.5, 0.01, 15.0},
-  {"Filter Env Sustain", 433, 174, 0.1, 0.001, 1.0},
-  {"Filter Env Release", 488, 174, 1.0, 0.01, 15.0}
+//const parameterProperties_struct parameterProperties[kNumParams] = {
+const parameterProperties_struct parameterProperties[] = {
+  {"Osc 1 Waveform", 530, 75},
+  {"Osc 1 Pitch Mod", 569, 61, 0.0, 0.0, 1.0},
+  {"Osc 2 Waveform", 503, 75},
+  {"Osc 2 Pitch Mod", 542, 61, 0.0, 0.0, 1.0},
+  {"Osc Mix", 530, 61, 0.5, 0.0, 1.0},
+  {"Filter Mode", 550, 188},
+  {"Filter Cutoff", 559, 174, 0.99, 0.0, 0.99},
+  {"Filter Resonance", 524, 174, 0.0, 0.0, 1.0},
+  {"Filter LFO Amount", 162-32, 92-32, 0.0, 0.0, 1.0},
+  {"Filter Envelope Amount", 56-32, 92-32, 0.0, -1.0, 1.0},
+  {"LFO Waveform", 550, 298},
+  {"LFO Frequency", 569, 284, 6.0, 0.01, 30.0},
+  {"Volume Env Attack", 523, 61, 0.01, 0.01, 10.0},
+  {"Volume Env Decay", 578, 61, 0.5, 0.01, 15.0},
+  {"Volume Env Sustain", 533, 61, 0.1, 0.001, 1.0},
+  {"Volume Env Release", 588, 61, 1.0, 0.01, 15.0},
+  {"Filter Env Attack", 523, 174, 0.01, 0.01, 10.0},
+  {"Filter Env Decay", 578, 174, 0.5, 0.01, 15.0},
+  {"Filter Env Sustain", 533, 174, 0.1, 0.001, 1.0},
+  {"Filter Env Release", 588, 174, 1.0, 0.01, 15.0}
 };
 
 enum ELayout
@@ -92,7 +93,7 @@ enum ELayout
 
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
-  printf("hello world\n");
+  //printf("hello world, params=%p\n", CreateParams);
   ds10_init(4);
   CreateParams();
   CreateGraphics();
@@ -104,6 +105,41 @@ SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kN
 
 SpaceBass::~SpaceBass() {}
 
+void SpaceBass::CreateParams() {
+	char name[32];
+	for (int i = 0; i < 20; i++) {
+		IParam* param = GetParam(i);
+		sprintf(name, "param%d", i);
+		param->InitDouble(name, 64, 0, 127, 1);
+	}
+}
+
+void SpaceBass::CreateGraphics() {
+	IGraphics* pGraphics = MakeGraphics(this, kWidth, kHeight);
+	pGraphics->AttachBackground(BG_ID, BG_FN);
+
+#if 0
+	IBitmap waveformBitmap = pGraphics->LoadIBitmap(WAVEFORM_ID, WAVEFORM_FN, 4);
+	IBitmap filterModeBitmap = pGraphics->LoadIBitmap(FILTERMODE_ID, FILTERMODE_FN, 3);
+#endif
+	IBitmap knobBitmap = pGraphics->LoadIBitmap(KNOB_ID, KNOB_FN, 128);
+
+	int x_pos[5] = { 55, 160, 254, 358, 460 };
+	int y_pos[4] = { 92, 174, 256, 338 };
+	for (int j = 0; j < 4; j++) {
+		for (int i = 0; i < 5; i++) {
+			IControl* control;
+			IBitmap* graphic;
+			graphic = &knobBitmap;
+			control = new IKnobMultiControl(this, x_pos[i] - 32, y_pos[j] - 32, j * 4 + i, graphic);
+
+			pGraphics->AttachControl(control);
+		}
+	}
+	AttachGraphics(pGraphics);
+}
+
+#if 0
 void SpaceBass::CreateParams() {
   for (int i = 0; i < kNumParams; i++) {
     IParam* param = GetParam(i);
@@ -157,15 +193,17 @@ void SpaceBass::CreateParams() {
 void SpaceBass::CreateGraphics() {
   IGraphics* pGraphics = MakeGraphics(this, kWidth, kHeight);
   pGraphics->AttachBackground(BG_ID, BG_FN);
+#ifdef KEYBOARD_ENABLED
   IBitmap whiteKeyImage = pGraphics->LoadIBitmap(WHITE_KEY_ID, WHITE_KEY_FN, 6);
   IBitmap blackKeyImage = pGraphics->LoadIBitmap(BLACK_KEY_ID, BLACK_KEY_FN);
   //                            C#     D#          F#      G#      A#
   int keyCoordinates[12] = { 0, 10, 17, 30, 35, 52, 61, 68, 79, 85, 97, 102 };
   mVirtualKeyboard = new IKeyboardControl(this, kKeybX, kKeybY, virtualKeyboardMinimumNoteNumber, /* octaves: */ 4, &whiteKeyImage, &blackKeyImage, keyCoordinates);
   pGraphics->AttachControl(mVirtualKeyboard);
+#endif
   IBitmap waveformBitmap = pGraphics->LoadIBitmap(WAVEFORM_ID, WAVEFORM_FN, 4);
   IBitmap filterModeBitmap = pGraphics->LoadIBitmap(FILTERMODE_ID, FILTERMODE_FN, 3);
-  IBitmap knobBitmap = pGraphics->LoadIBitmap(KNOB_ID, KNOB_FN, 64);
+  IBitmap knobBitmap = pGraphics->LoadIBitmap(KNOB_ID, KNOB_FN, 128);
   for (int i = 0; i < kNumParams; i++) {
     const parameterProperties_struct& properties = parameterProperties[i];
     IControl* control;
@@ -192,6 +230,7 @@ void SpaceBass::CreateGraphics() {
   }
   AttachGraphics(pGraphics);
 }
+#endif
 
 void SpaceBass::CreatePresets() {
 }
@@ -205,7 +244,9 @@ void SpaceBass::ProcessDoubleReplacing(
   
   double *leftOutput = outputs[0];
   double *rightOutput = outputs[1];
+#ifdef KEYBOARD_ENABLED
   processVirtualKeyboard();
+#endif
   for (int i = 0; i < nFrames; ++i) {
     mMIDIReceiver.advance();
     leftOutput[i] = rightOutput[i] = ds10_get_sample();
@@ -304,9 +345,12 @@ void SpaceBass::OnParamChange(int paramIdx)
 
 void SpaceBass::ProcessMidiMsg(IMidiMsg* pMsg) {
   mMIDIReceiver.onMessageReceived(pMsg);
+#ifdef KEYBOARD_ENABLED
   mVirtualKeyboard->SetDirty();
+#endif
 }
 
+#ifdef KEYBOARD_ENABLED
 void SpaceBass::processVirtualKeyboard() {
   IKeyboardControl* virtualKeyboard = (IKeyboardControl*) mVirtualKeyboard;
   int virtualKeyboardNoteNumber = virtualKeyboard->GetKey() + virtualKeyboardMinimumNoteNumber;
@@ -327,3 +371,4 @@ void SpaceBass::processVirtualKeyboard() {
   
   lastVirtualKeyboardNoteNumber = virtualKeyboardNoteNumber;
 }
+#endif
