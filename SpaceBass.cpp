@@ -131,8 +131,11 @@ void SpaceBass::CreateGraphics() {
 			IControl* control;
 			IBitmap* graphic;
 			graphic = &knobBitmap;
-			control = new IKnobMultiControl(this, x_pos[i] - 32 - 2, y_pos[j] - 32 - 2, j * 4 + i, graphic);
-
+			int x = x_pos[i] - 32 - 2;
+			int y = y_pos[j] - 32 - 2;
+			printf("{ \"kn%dx%d\", %d, %d, 1, 0, 127 },\n", i, j, x, y);
+			control = new IKnobMultiControl(this, x, y, j * 4 + i, graphic);
+			
 			pGraphics->AttachControl(control);
 		}
 	}
@@ -140,8 +143,10 @@ void SpaceBass::CreateGraphics() {
 		IControl* control;
 		IBitmap* graphic;
 		graphic = &knobBitmap;
-		control = new IKnobMultiControl(this, 44+i*86 - 32, 569 - 32, 20+i, graphic);
-
+		int x = 44 + i * 86 - 32;
+		int y = 569 - 32;
+		printf("{ \"kn%dx%d\", %d, %d, 1, 0, 127 },\n", i, 5, x, y);
+		control = new IKnobMultiControl(this, x, y, 20 + i, graphic);
 		pGraphics->AttachControl(control);
 	}
 	AttachGraphics(pGraphics);
