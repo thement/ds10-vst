@@ -93,10 +93,10 @@ enum ELayout
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
   printf("hello world\n");
+  ds10_init(4);
   CreateParams();
   CreateGraphics();
   CreatePresets();
-  ds10_init(0);
   
   mMIDIReceiver.noteOn.Connect(&voiceManager, &VoiceManager::onNoteOn);
   mMIDIReceiver.noteOff.Connect(&voiceManager, &VoiceManager::onNoteOff);
@@ -208,7 +208,7 @@ void SpaceBass::ProcessDoubleReplacing(
   processVirtualKeyboard();
   for (int i = 0; i < nFrames; ++i) {
     mMIDIReceiver.advance();
-    leftOutput[i] = rightOutput[i] = ds10_get_sample()/32768.0;
+    leftOutput[i] = rightOutput[i] = ds10_get_sample();
   }
   
   mMIDIReceiver.Flush(nFrames);

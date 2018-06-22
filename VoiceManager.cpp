@@ -23,7 +23,7 @@ Voice* VoiceManager::findFreeVoice() {
 }
 
 void VoiceManager::onNoteOn(int noteNumber, int velocity) {
-	ds10_noteon(noteNumber, 0x7f);
+	ds10_noteon(0, noteNumber, 0x7f);
 	return;
     Voice* voice = findFreeVoice();
     if (!voice) {
@@ -38,7 +38,7 @@ void VoiceManager::onNoteOn(int noteNumber, int velocity) {
 }
 
 void VoiceManager::onNoteOff(int noteNumber, int velocity) {
-	ds10_noteoff();
+	ds10_noteoff(0);
 	return;
     // Find the voice(s) with the given noteNumber:
     for (int i = 0; i < NumberOfVoices; i++) {
