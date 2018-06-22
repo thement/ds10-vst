@@ -18,6 +18,7 @@ enum {
 
 double ds10_get_sample(void);
 void ds10_knob(int voice, unsigned id, unsigned val);
+void ds10_knob_all(unsigned id, unsigned val);
 void ds10_noteon(int voice, int key, int vel);
 void ds10_noteoff(int voice);
 void ds10_init(int polyphony);

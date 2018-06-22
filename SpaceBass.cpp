@@ -258,6 +258,8 @@ void SpaceBass::OnParamChange(int paramIdx)
         changer = bind(&VoiceManager::setFilterMode, _1, static_cast<Filter::FilterMode>(param->Int()));
         break;
       case mFilterCutoff:
+		ds10_knob_all(11, param->Value() * 128);
+		return;
         changer = bind(&VoiceManager::setFilterCutoff, _1, param->Value());
         break;
       case mFilterResonance:

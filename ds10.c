@@ -88,6 +88,13 @@ ds10_knob(int voice, unsigned id, unsigned val)
 }
 
 void
+ds10_knob_all(unsigned id, unsigned val)
+{
+	for (int i = 0; i < ds10_polyphony; i++)
+		ds10_knob(i, id, val);
+}
+
+void
 ds10_noteon(int voice, int key, int vel)
 {
 	DsDevice *dev = &devices[0];
@@ -146,9 +153,9 @@ ds10_init(int polyphony)
 	/* this is our "stack" and scratchpad */
 	newseg(0xf0000000, 0x00400000, seg_count++);
 #else
-	ds10_polyphony = polyphony;
 	for (int i = 0; i < polyphony; i++)
 		ds10_mem[i] = readseg("c:\\01ff8000x.bin");
+	ds10_polyphony = polyphony;
 #endif
 
 	execute_fn = execute1;
