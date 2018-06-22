@@ -48,37 +48,54 @@ enum EParams
   mFilterEnvRelease,
 };
 
-typedef struct {
-  const char* name;
+typedef struct Params Params;
+struct Params {
+  const int type;
+  const char *name;
   const int x;
   const int y;
-  const double defaultVal;
-  const double minVal;
-  const double maxVal;
-} parameterProperties_struct;
+  const int ds_id;
+  const int minVal;
+  const int maxVal;
+};
 
-//const parameterProperties_struct parameterProperties[kNumParams] = {
-const parameterProperties_struct parameterProperties[] = {
-  {"Osc 1 Waveform", 530, 75},
-  {"Osc 1 Pitch Mod", 569, 61, 0.0, 0.0, 1.0},
-  {"Osc 2 Waveform", 503, 75},
-  {"Osc 2 Pitch Mod", 542, 61, 0.0, 0.0, 1.0},
-  {"Osc Mix", 530, 61, 0.5, 0.0, 1.0},
-  {"Filter Mode", 550, 188},
-  {"Filter Cutoff", 559, 174, 0.99, 0.0, 0.99},
-  {"Filter Resonance", 524, 174, 0.0, 0.0, 1.0},
-  {"Filter LFO Amount", 162-32, 92-32, 0.0, 0.0, 1.0},
-  {"Filter Envelope Amount", 56-32, 92-32, 0.0, -1.0, 1.0},
-  {"LFO Waveform", 550, 298},
-  {"LFO Frequency", 569, 284, 6.0, 0.01, 30.0},
-  {"Volume Env Attack", 523, 61, 0.01, 0.01, 10.0},
-  {"Volume Env Decay", 578, 61, 0.5, 0.01, 15.0},
-  {"Volume Env Sustain", 533, 61, 0.1, 0.001, 1.0},
-  {"Volume Env Release", 588, 61, 1.0, 0.01, 15.0},
-  {"Filter Env Attack", 523, 174, 0.01, 0.01, 10.0},
-  {"Filter Env Decay", 578, 174, 0.5, 0.01, 15.0},
-  {"Filter Env Sustain", 533, 174, 0.1, 0.001, 1.0},
-  {"Filter Env Release", 588, 174, 1.0, 0.01, 15.0}
+enum {
+	PKnob,
+	PKnob4,
+	PKnob5,
+	PSwitch2,
+	PSwitch3,
+	PSrc7,
+	PPoly4,
+	PNumTypes
+};
+const Params parameterProperties[kNumParams] = {
+	{ PKnob5,  "kn0x0", 20, 58, 1, 0, 127 },
+	{ PKnob4,  "kn1x0", 126, 58, 1, 0, 127 },
+	{ PKnob4,  "kn2x0", 220, 58, 1, 0, 127 },
+	{ PKnob,  "kn3x0", 324, 58, 1, 0, 127 },
+	{ PKnob,  "kn4x0", 426, 58, 1, 0, 127 },
+	{ PKnob,  "kn0x1", 20, 140, 1, 0, 127 },
+	{ PKnob,  "kn1x1", 126, 140, 1, 0, 127 },
+	{ PKnob,  "kn2x1", 220, 140, 1, 0, 127 },
+	{ PKnob,  "kn3x1", 324, 140, 1, 0, 127 },
+	{ PKnob,  "kn4x1", 426, 140, 1, 0, 127 },
+	{ PKnob,  "kn0x2", 20, 222, 1, 0, 127 },
+	{ PKnob,  "kn1x2", 126, 222, 1, 0, 127 },
+	{ PSwitch2,"kn2x2", 232, 218, 1, 0, 127 },
+	{ PKnob,  "kn3x2", 324, 222, 1, 0, 127 },
+	{ PKnob,  "kn4x2", 426, 222, 1, 0, 127 },
+	{ PKnob,  "kn0x3", 20, 304, 1, 0, 127 },
+	{ PKnob,  "kn1x3", 126, 304, 1, 0, 127 },
+	{ PSwitch2,  "kn2x3", 232, 306, 1, 0, 127 },
+	{ PSwitch3,  "kn3x3", 338, 306, 1, 0, 127 },
+	{ PKnob,  "kn4x3", 426, 304, 1, 0, 127 },
+	{ PKnob,  "kn0x5", 12, 537, 1, 0, 127 },
+	{ PKnob,  "kn1x5", 98, 537, 1, 0, 127 },
+	{ PKnob,  "kn2x5", 184, 537, 1, 0, 127 },
+	{ PKnob,  "kn3x5", 270, 537, 1, 0, 127 },
+	{ PKnob,  "kn4x5", 356, 537, 1, 0, 127 },
+	{ PKnob,  "kn5x5", 442, 537, 1, 0, 127 },
 };
 
 enum ELayout
@@ -108,9 +125,28 @@ SpaceBass::~SpaceBass() {}
 void SpaceBass::CreateParams() {
 	char name[32];
 	for (int i = 0; i < kNumParams; i++) {
-		IParam* param = GetParam(i);
+		IParam *par = GetParam(i);
+		const Params *param = &parameterProperties[i];
 		sprintf(name, "param%d", i);
-		param->InitDouble(name, 64, 0, 127, 1);
+
+		switch (param->type) {
+		default:
+		case PKnob:
+			par->InitDouble(name, 64, 0, 127, 1);
+			break;
+		case PSwitch2:
+			par->InitEnum(name, 0, 2);
+			break;
+		case PSwitch3:
+			par->InitEnum(name, 0, 3);
+			break;
+		case PKnob4:
+			par->InitEnum(name, 0, 4);
+			break;
+		case PKnob5:
+			par->InitEnum(name, 0, 5);
+			break;
+		}
 	}
 }
 
@@ -122,31 +158,29 @@ void SpaceBass::CreateGraphics() {
 	IBitmap waveformBitmap = pGraphics->LoadIBitmap(WAVEFORM_ID, WAVEFORM_FN, 4);
 	IBitmap filterModeBitmap = pGraphics->LoadIBitmap(FILTERMODE_ID, FILTERMODE_FN, 3);
 #endif
-	IBitmap knobBitmap = pGraphics->LoadIBitmap(KNOB_ID, KNOB_FN, 128);
+	IBitmap bitmaps[PNumTypes];
+	bitmaps[PKnob] = pGraphics->LoadIBitmap(KNOB_ID, KNOB_FN, 128);
+	bitmaps[PKnob4] = pGraphics->LoadIBitmap(KNOB4_ID, KNOB4_FN, 4);
+	bitmaps[PKnob5] = pGraphics->LoadIBitmap(KNOB5_ID, KNOB5_FN, 5);
+	bitmaps[PSwitch2] = pGraphics->LoadIBitmap(SWITCH2_ID, SWITCH2_FN, 2);
+	bitmaps[PSwitch3] = pGraphics->LoadIBitmap(SWITCH3_ID, SWITCH3_FN, 3);
 
-	int x_pos[5] = { 54, 160, 254, 358, 460 };
-	int y_pos[4] = { 92, 174, 256, 338,   };
-	for (int j = 0; j < 4; j++) {
-		for (int i = 0; i < 5; i++) {
-			IControl* control;
-			IBitmap* graphic;
-			graphic = &knobBitmap;
-			int x = x_pos[i] - 32 - 2;
-			int y = y_pos[j] - 32 - 2;
-			printf("{ \"kn%dx%d\", %d, %d, 1, 0, 127 },\n", i, j, x, y);
-			control = new IKnobMultiControl(this, x, y, j * 4 + i, graphic);
-			
-			pGraphics->AttachControl(control);
-		}
-	}
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < kNumParams; i++) {
 		IControl* control;
-		IBitmap* graphic;
-		graphic = &knobBitmap;
-		int x = 44 + i * 86 - 32;
-		int y = 569 - 32;
-		printf("{ \"kn%dx%d\", %d, %d, 1, 0, 127 },\n", i, 5, x, y);
-		control = new IKnobMultiControl(this, x, y, 20 + i, graphic);
+		const Params *param = &parameterProperties[i];
+
+		switch (param->type) {
+		case PKnob:
+		case PKnob4:
+		case PKnob5:
+		default:
+			control = new IKnobMultiControl(this, param->x, param->y, i, &bitmaps[param->type]);
+			break;
+		case PSwitch2:
+		case PSwitch3:
+			control = new ISwitchControl(this, param->x, param->y, i, &bitmaps[param->type]);
+			break;
+		}
 		pGraphics->AttachControl(control);
 	}
 	AttachGraphics(pGraphics);

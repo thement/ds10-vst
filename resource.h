@@ -60,20 +60,25 @@ instrument determined by PLUG _IS _INST
 #define PLUG_DOES_STATE_CHUNKS 0
 
 // Unique IDs for each image resource.
-#define BG_ID         101
-#define WHITE_KEY_ID  102
-#define BLACK_KEY_ID  103
-#define WAVEFORM_ID   104
-#define KNOB_ID       105
-#define FILTERMODE_ID 106
+#define BG_ID			101
+#define WHITE_KEY_ID	102
+#define BLACK_KEY_ID	103
+#define KNOB_ID			104
+#define KNOB4_ID		105
+#define KNOB5_ID		106
+#define SWITCH2_ID		107
+#define SWITCH3_ID		108
 
 // Image resource locations for this plug.
 #define BG_FN         "resources/img/panel3.png"
 #define WHITE_KEY_FN  "resources/img/whitekey.png"
 #define BLACK_KEY_FN  "resources/img/blackkey.png"
-#define WAVEFORM_FN   "resources/img/waveform.png"
+
 #define KNOB_FN       "resources/img/testknob3.png"
-#define FILTERMODE_FN "resources/img/filtermode.png"
+#define KNOB4_FN      "resources/img/testknob3-4.png"
+#define KNOB5_FN      "resources/img/testknob3-5.png"
+#define SWITCH2_FN    "resources/img/sw-2.png"
+#define SWITCH3_FN    "resources/img/sw-3.png"
 
 // GUI default dimensions
 #define GUI_WIDTH 512
