@@ -18,6 +18,7 @@ public:
     friend class VoiceManager;
     Voice()
     : mNoteNumber(-1),
+	mVoiceNum(0),
     mVelocity(0),
     mFilterEnvelopeAmount(0.0),
     mFilterLFOAmount(0.0),
@@ -35,8 +36,10 @@ public:
     inline void setOscillatorTwoPitchAmount(double amount) { mOscillatorTwoPitchAmount = amount; }
     inline void setOscillatorMix(double mix) { mOscillatorMix = mix; }
     inline void setLFOValue(double value) { mLFOValue = value; }
+	inline void setVoiceNo(int n) { mVoiceNum = n;  }
     
     inline void setNoteNumber(int noteNumber) {
+		printf("voice %d got note %d\n", mVoiceNum, noteNumber);
         mNoteNumber = noteNumber;
         double frequency = 440.0 * pow(2.0, (mNoteNumber - 69.0) / 12.0);
         mOscillatorOne.setFrequency(frequency);
@@ -47,6 +50,7 @@ public:
     
     void reset();
 private:
+	int mVoiceNum;
     PolyBLEPOscillator mOscillatorOne;
     PolyBLEPOscillator mOscillatorTwo;
     EnvelopeGenerator mVolumeEnvelope;

@@ -5,7 +5,9 @@
 //  Created by Martin on 08.04.14.
 //
 //
-
+extern "C" {
+#include "ds10.h"
+};
 #include "Voice.h"
 
 double Voice::nextSample() {

@@ -1,6 +1,9 @@
+#ifndef DS10_H
+#define DS10_H
 
 #define DS10_BUF_NSAMP (0x40)
 
+#include <stdint.h>
 enum {
 	DS10_SYNTH1,
 	DS10_SYNTH2,
@@ -32,3 +35,5 @@ extern uint8_t *basemem;
 #define vaddr(x,a,b) ((x) < 0x02800000 ? &basemem[((x) - 0x01ff8000) & 0x007fffff]: fault_handler(x,a))
 
 void execute1(uint32_t in_R15, uint32_t in_R14, uint32_t in_R13, uint32_t in_R0, uint32_t in_R1, uint32_t in_R2, uint32_t in_R3);
+
+#endif

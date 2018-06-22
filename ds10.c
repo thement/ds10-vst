@@ -48,7 +48,7 @@ static DsDevice devices[DS10_N_DEVICES] = {
 #define MAX_VOICES 8
 
 static uint8_t *ds10_mem[MAX_VOICES];
-static double sample_buf[MAX_VOICES][DS10_BUF_NSAMP];
+static double sample_buf[DS10_BUF_NSAMP];
 static int in_buf = 0, in_ptr = 0;
 static int ds10_polyphony = 0;
 
@@ -133,11 +133,12 @@ readseg(const char *path)
 	fclose(fp);
 	return mem;
 }
-
+FILE *xlog;
 void
 ds10_init(int polyphony)
 {
 	assert(polyphony < MAX_VOICES);
+	xlog = fopen("C:\\Users\\Poly Cajt\\log.txt", "w");
 #if 0
 	readseg("02000000.bin");
 	readseg("01ff8000.bin");
@@ -169,6 +170,10 @@ int printf2(const char *format, ...)
 	va_end(argptr);
 
 	OutputDebugStringA(str);
+	if (xlog) {
+		fputs(str, xlog);
+		fflush(xlog);
+	}
 
 	return ret;
 }
