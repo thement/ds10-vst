@@ -75,9 +75,9 @@ ds10_knob(int dev_id, unsigned id, unsigned val)
 }
 
 void
-ds10_noteon(int dev_id, int key, int vel)
+ds10_noteon(int key, int vel)
 {
-	DsDevice *dev = &devices[dev_id];
+	DsDevice *dev = &devices[0];
 
 	writel(dev->addr + dev->queue_off, 2);
 	writel(dev->addr + dev->queue_off + 4, key);
@@ -85,9 +85,9 @@ ds10_noteon(int dev_id, int key, int vel)
 }
 
 void
-ds10_noteoff(int dev_id)
+ds10_noteoff(void)
 {
-	DsDevice *dev = &devices[dev_id];
+	DsDevice *dev = &devices[0];
 
 	writel(dev->addr + dev->queue_off, 1);
 	writel(dev->addr + dev->queue_off + 4, 0);

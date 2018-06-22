@@ -7,6 +7,9 @@
 //
 
 #include "VoiceManager.h"
+extern "C" {
+#include "ds10.h"
+};
 
 Voice* VoiceManager::findFreeVoice() {
     Voice* freeVoice = NULL;
@@ -20,6 +23,8 @@ Voice* VoiceManager::findFreeVoice() {
 }
 
 void VoiceManager::onNoteOn(int noteNumber, int velocity) {
+	ds10_noteon(noteNumber, 0x7f);
+	return;
     Voice* voice = findFreeVoice();
     if (!voice) {
         return;
@@ -33,6 +38,8 @@ void VoiceManager::onNoteOn(int noteNumber, int velocity) {
 }
 
 void VoiceManager::onNoteOff(int noteNumber, int velocity) {
+	ds10_noteoff();
+	return;
     // Find the voice(s) with the given noteNumber:
     for (int i = 0; i < NumberOfVoices; i++) {
         Voice& voice = voices[i];

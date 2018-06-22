@@ -14,8 +14,8 @@ enum {
 
 int16_t ds10_get_sample(void);
 void ds10_knob(int dev_id, unsigned id, unsigned val);
-void ds10_noteon(int dev_id, int key, int vel);
-void ds10_noteoff(int dev_id);
+void ds10_noteon(int key, int vel);
+void ds10_noteoff(void);
 void ds10_init(int emulate);
 void ds10_exit(void);
 uint32_t readl(uint32_t addr);
