@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <math.h>
-#include "dat.h"
-#include "fns.h"
+#include "ds10.h"
 
 static int32_t divregs[16];
 static uint32_t divcnt;
@@ -9,7 +8,7 @@ static int32_t sqrtregs[3];
 static uint32_t sqrtcnt;
 
 void *
-fault_handler(u32int addr, u32int len)
+fault_handler(uint32_t addr, uint32_t len)
 {
 	if (addr >= 0x4000290 && addr < 0x40002b0) {
 		if (len != 4)

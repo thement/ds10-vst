@@ -1,18 +1,15 @@
 #include <stdio.h>
-#include <unistd.h>
+#include <stdarg.h>
 #include <assert.h>
 #include <string.h>
 #include <fcntl.h>
-#include "dat.h"
-#include "fns.h"
+#include <stdint.h>
+#include <stdlib.h>
 #include "ds10.h"
 
 
-static Process static_P;
-static FILE *out;
-Process *P = &static_P;
 int fulltrace = 0;
-void (*execute_fn)(u32int pc, u32int lr, u32int sp, u32int r0, u32int r1, u32int r2, u32int r3);
+void (*execute_fn)(uint32_t pc, uint32_t lr, uint32_t sp, uint32_t r0, uint32_t r1, uint32_t r2, uint32_t r3);
 
 void
 writel(uint32_t addr, uint32_t val)
@@ -24,21 +21,6 @@ uint32_t
 readl(uint32_t addr)
 {
 	return *(uint32_t *)vaddr(addr, 4, 0);
-}
-
-void
-play(int16_t x)
-{
-	if (out)
-		fwrite(&x, 2, 1, out);
-}
-
-void
-playblock(unsigned addr, unsigned size)
-{
-	for (int i = 0; i < size; i++) {
-		play(*(uint16_t *)vaddr(addr + 2*i, 2, 0));
-	}
 }
 
 typedef struct DsDevice DsDevice;
@@ -60,37 +42,6 @@ static DsDevice devices[DS10_N_DEVICES] = {
 };
 
 
-/* FIXME */
-typedef struct Data Data;
-struct Data {
-	void *data;
-	size_t len;
-};
-
-void
-ds10_load_sample(int dev_id, const char *path)
-{
-	uint32_t sample_addr, sample_len;
-	void *sample_mem;
-	DsDevice *dev = &devices[dev_id];
-
-	if (!(dev_id >= DS10_DRUM1 && dev_id <= DS10_DRUM4))
-		return;
-
-	sample_len = readl(dev->addr + 0x40);
-	sample_addr = readl(dev->addr + 0x44);
-	assert(sample_len == 0x8000);
-	sample_mem = vaddr(sample_addr, sample_len, 0);
-
-	int fd = open(path, O_RDONLY);
-	if (fd < 0)
-		pexit(path);
-	if (read(fd, sample_mem, sample_len) != sample_len) {
-		fprintf(stderr, "short read %s\n", path);
-		exit(1);
-	}
-	close(fd);
-}
 #define INIT_SP 0x01FFA000
 #define INIT_LR 0xe0000000
 void
@@ -99,7 +50,7 @@ ds10_synth(int dev_id, int16_t *ptr, int size)
 	DsDevice *dev = &devices[dev_id];
 
 	execute_fn(dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
-	playblock(dev->buf_addr, DS10_BUF_NSAMP);
+
 	if (ptr) {
 		assert(size == DS10_BUF_NSAMP*2);
 		memcpy(ptr, vaddr(dev->buf_addr, size, 0), size);
@@ -139,10 +90,22 @@ ds10_noteoff(int dev_id)
 void
 ds10_reverse(void)
 {
-	reverse();
+
 }
 
 extern uint8_t *basemem;
+#define SEGSIZE (0x8000 + 0x400000)
+static void
+readseg(const char *path)
+{
+	FILE *fp = fopen(path, "rb");
+	assert(fp);
+	basemem = calloc(1, SEGSIZE);
+	assert(basemem);
+	size_t ret = fread(basemem, SEGSIZE, 1, fp);
+	assert(ret == 1);
+	fclose(fp);
+}
 
 void
 ds10_init(int emulate)
@@ -154,22 +117,28 @@ ds10_init(int emulate)
 	newseg(0xf0000000, 0x00400000, seg_count++);
 #else
 	readseg("01ff8000x.bin");
-	basemem = P->S[0]->data;
 #endif
 
-	if (emulate)
-		execute_fn = execute;
-	else
-		execute_fn = execute1;
-
-	out = fopen("out.raw", "wb");
+	execute_fn = execute1;
 }
 
 void
 ds10_exit(void)
 {
-	printmap(0);
-	printmap(1);
-	if (out)
-		fclose(out);
+}
+
+/* utils */
+
+int __cdecl printf2(const char *format, ...)
+{
+	char str[1024];
+
+	va_list argptr;
+	va_start(argptr, format);
+	int ret = vsnprintf(str, sizeof(str), format, argptr);
+	va_end(argptr);
+
+	OutputDebugStringA(str);
+
+	return ret;
 }

@@ -13,7 +13,6 @@
     <ClCompile Include="VoiceManager.cpp" />
     <ClCompile Include="Voice.cpp" />
     <ClCompile Include="arm_math.c" />
-    <ClCompile Include="c-code.c" />
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10.c" />
   </ItemGroup>
@@ -33,6 +32,7 @@
     <ClInclude Include="VoiceManager.h" />
     <ClInclude Include="Voice.h" />
     <ClInclude Include="ds10.h" />
+    <ClInclude Include="c-code.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />

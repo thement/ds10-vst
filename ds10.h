@@ -1,3 +1,4 @@
+
 #define DS10_BUF_NSAMP (0x40)
 
 enum {
@@ -17,9 +18,16 @@ void ds10_noteon(int dev_id, int key, int vel);
 void ds10_noteoff(int dev_id);
 void ds10_init(int emulate);
 void ds10_exit(void);
-void ds10_load_sample(int dev_id, const char *path);
-void play(int16_t x);
-void playblock(unsigned addr, unsigned size);
 uint32_t readl(uint32_t addr);
 void writel(uint32_t addr, uint32_t val);
 void ds10_reverse(void);
+
+void *fault_handler(uint32_t addr, uint32_t len);
+
+#define printf printf2
+int __cdecl printf2(const char *format, ...);
+extern uint8_t *basemem;
+
+#define vaddr(x,a,b) ((x) < 0x02800000 ? &basemem[((x) - 0x01ff8000) & 0x007fffff]: fault_handler(x,a))
+
+void execute1(uint32_t in_R15, uint32_t in_R14, uint32_t in_R13, uint32_t in_R0, uint32_t in_R1, uint32_t in_R2, uint32_t in_R3);

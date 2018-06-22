@@ -12,6 +12,8 @@
 
 #include <functional>
 
+#include "ds10.h"
+
 const int kNumPrograms = 5;
 
 const double parameterStep = 0.001;
@@ -87,21 +89,6 @@ enum ELayout
 };
 
 
-int __cdecl printf2(const char *format, ...)
-{
-	char str[1024];
-
-	va_list argptr;
-	va_start(argptr, format);
-	int ret = vsnprintf(str, sizeof(str), format, argptr);
-	va_end(argptr);
-
-	OutputDebugStringA(str);
-
-	return ret;
-}
-
-#define printf printf2
 
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;

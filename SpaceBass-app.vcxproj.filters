@@ -58,6 +58,7 @@
     <ClInclude Include="PolyBLEPOscillator.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="ds10.h" />
+    <ClInclude Include="c-code.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\WDL\rtaudiomidi\RtAudio.cpp">
@@ -95,7 +96,6 @@
     <ClCompile Include="arm_math.c" />
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10.c" />
-    <ClCompile Include="c-code.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />
