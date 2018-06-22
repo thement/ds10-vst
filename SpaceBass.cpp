@@ -86,9 +86,26 @@ enum ELayout
   kKeybY = 425
 };
 
+
+int __cdecl printf2(const char *format, ...)
+{
+	char str[1024];
+
+	va_list argptr;
+	va_start(argptr, format);
+	int ret = vsnprintf(str, sizeof(str), format, argptr);
+	va_end(argptr);
+
+	OutputDebugStringA(str);
+
+	return ret;
+}
+
+#define printf printf2
+
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
-  
+  printf("hello world\r\n");
   CreateParams();
   CreateGraphics();
   CreatePresets();
