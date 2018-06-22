@@ -20,7 +20,7 @@ const double parameterStep = 0.001;
 
 enum EParams
 {
-	kNumParams = 20,
+	kNumParams = 26,
   // Oscillator Section:
   mOsc1Waveform = 0,
   mOsc1PitchMod,
@@ -107,7 +107,7 @@ SpaceBass::~SpaceBass() {}
 
 void SpaceBass::CreateParams() {
 	char name[32];
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < kNumParams; i++) {
 		IParam* param = GetParam(i);
 		sprintf(name, "param%d", i);
 		param->InitDouble(name, 64, 0, 127, 1);
@@ -124,17 +124,25 @@ void SpaceBass::CreateGraphics() {
 #endif
 	IBitmap knobBitmap = pGraphics->LoadIBitmap(KNOB_ID, KNOB_FN, 128);
 
-	int x_pos[5] = { 55, 160, 254, 358, 460 };
-	int y_pos[4] = { 92, 174, 256, 338 };
+	int x_pos[5] = { 54, 160, 254, 358, 460 };
+	int y_pos[4] = { 92, 174, 256, 338,   };
 	for (int j = 0; j < 4; j++) {
 		for (int i = 0; i < 5; i++) {
 			IControl* control;
 			IBitmap* graphic;
 			graphic = &knobBitmap;
-			control = new IKnobMultiControl(this, x_pos[i] - 32, y_pos[j] - 32, j * 4 + i, graphic);
+			control = new IKnobMultiControl(this, x_pos[i] - 32 - 2, y_pos[j] - 32 - 2, j * 4 + i, graphic);
 
 			pGraphics->AttachControl(control);
 		}
+	}
+	for (int i = 0; i < 6; i++) {
+		IControl* control;
+		IBitmap* graphic;
+		graphic = &knobBitmap;
+		control = new IKnobMultiControl(this, 44+i*86 - 32, 569 - 32, 20+i, graphic);
+
+		pGraphics->AttachControl(control);
 	}
 	AttachGraphics(pGraphics);
 }
@@ -265,8 +273,10 @@ void SpaceBass::Reset()
 
 void SpaceBass::OnParamChange(int paramIdx)
 {
+	
   IMutexLock lock(this);
   IParam* param = GetParam(paramIdx);
+  printf("param %d: %lf\n", paramIdx, param->Value());
   if(paramIdx == mLFOWaveform) {
     voiceManager.setLFOMode(static_cast<Oscillator::OscillatorMode>(param->Int()));
   } else if(paramIdx == mLFOFrequency) {
@@ -338,6 +348,7 @@ void SpaceBass::OnParamChange(int paramIdx)
       case mFilterEnvRelease:
         changer = bind(&VoiceManager::setFilterEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_RELEASE, param->Value());
         break;
+	  default: return;
     }
     voiceManager.changeAllVoices(changer);
   }

@@ -68,7 +68,7 @@ instrument determined by PLUG _IS _INST
 #define FILTERMODE_ID 106
 
 // Image resource locations for this plug.
-#define BG_FN         "resources/img/panel2.png"
+#define BG_FN         "resources/img/panel3.png"
 #define WHITE_KEY_FN  "resources/img/whitekey.png"
 #define BLACK_KEY_FN  "resources/img/blackkey.png"
 #define WAVEFORM_FN   "resources/img/waveform.png"
