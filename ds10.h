@@ -25,7 +25,7 @@ void ds10_reverse(void);
 void *fault_handler(uint32_t addr, uint32_t len);
 
 #define printf printf2
-int __cdecl printf2(const char *format, ...);
+int printf2(const char *format, ...);
 extern uint8_t *basemem;
 
 #define vaddr(x,a,b) ((x) < 0x02800000 ? &basemem[((x) - 0x01ff8000) & 0x007fffff]: fault_handler(x,a))

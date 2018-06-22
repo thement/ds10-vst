@@ -11,9 +11,9 @@
 #include <algorithm>
 
 #include <functional>
-
+extern "C" {
 #include "ds10.h"
-
+}
 const int kNumPrograms = 5;
 
 const double parameterStep = 0.001;
@@ -92,10 +92,11 @@ enum ELayout
 
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
-  printf("hello world\r\n");
+  printf("hello world\n");
   CreateParams();
   CreateGraphics();
   CreatePresets();
+  ds10_init(0);
   
   mMIDIReceiver.noteOn.Connect(&voiceManager, &VoiceManager::onNoteOn);
   mMIDIReceiver.noteOff.Connect(&voiceManager, &VoiceManager::onNoteOff);

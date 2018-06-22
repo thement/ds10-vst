@@ -95,16 +95,20 @@ ds10_reverse(void)
 
 extern uint8_t *basemem;
 #define SEGSIZE (0x8000 + 0x400000)
-static void
+static void *
 readseg(const char *path)
 {
 	FILE *fp = fopen(path, "rb");
+	void *mem;
+	printf("fopen of %s = %p\n", path, fp);
 	assert(fp);
-	basemem = calloc(1, SEGSIZE);
-	assert(basemem);
-	size_t ret = fread(basemem, SEGSIZE, 1, fp);
+	mem = calloc(1, SEGSIZE);
+	assert(mem);
+	size_t ret = fread(mem, SEGSIZE, 1, fp);
+	printf("ret = %d\n", (int)ret);
 	assert(ret == 1);
 	fclose(fp);
+	return mem;
 }
 
 void
@@ -116,7 +120,7 @@ ds10_init(int emulate)
 	/* this is our "stack" and scratchpad */
 	newseg(0xf0000000, 0x00400000, seg_count++);
 #else
-	readseg("01ff8000x.bin");
+	basemem = readseg("c:\\01ff8000x.bin");
 #endif
 
 	execute_fn = execute1;
@@ -129,7 +133,7 @@ ds10_exit(void)
 
 /* utils */
 
-int __cdecl printf2(const char *format, ...)
+int printf2(const char *format, ...)
 {
 	char str[1024];
 
