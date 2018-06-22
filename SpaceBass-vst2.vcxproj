@@ -237,6 +237,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\WDL\IPlug\IPlugVST.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="ds10.h" />
     <ClInclude Include="EnvelopeGenerator.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="GallantSignal.h" />
@@ -250,6 +251,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\WDL\IPlug\IPlugVST.cpp" />
+    <ClCompile Include="arm_math.c" />
+    <ClCompile Include="c-code.c" />
+    <ClCompile Include="c-driver.c" />
+    <ClCompile Include="ds10.c" />
     <ClCompile Include="EnvelopeGenerator.cpp" />
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="MIDIReceiver.cpp" />

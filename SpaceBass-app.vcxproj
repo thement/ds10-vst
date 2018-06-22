@@ -278,6 +278,7 @@
     <ClInclude Include="app_wrapper\app_main.h" />
     <ClInclude Include="app_wrapper\app_resource.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="ds10.h" />
     <ClInclude Include="EnvelopeGenerator.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="GallantSignal.h" />
@@ -298,6 +299,10 @@
     <ClCompile Include="..\..\WDL\rtaudiomidi\RtMidi.cpp" />
     <ClCompile Include="app_wrapper\app_dialog.cpp" />
     <ClCompile Include="app_wrapper\app_main.cpp" />
+    <ClCompile Include="arm_math.c" />
+    <ClCompile Include="c-code.h" />
+    <ClCompile Include="c-driver.c" />
+    <ClCompile Include="ds10.c" />
     <ClCompile Include="EnvelopeGenerator.cpp" />
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="MIDIReceiver.cpp" />
@@ -309,6 +314,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="01ff8000x.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,6 +12,10 @@
     <ClCompile Include="PolyBLEPOscillator.cpp" />
     <ClCompile Include="VoiceManager.cpp" />
     <ClCompile Include="Voice.cpp" />
+    <ClCompile Include="arm_math.c" />
+    <ClCompile Include="c-code.c" />
+    <ClCompile Include="c-driver.c" />
+    <ClCompile Include="ds10.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SpaceBass.h" />
@@ -28,6 +32,7 @@
     <ClInclude Include="Oscillator.h" />
     <ClInclude Include="VoiceManager.h" />
     <ClInclude Include="Voice.h" />
+    <ClInclude Include="ds10.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />
