@@ -24,10 +24,11 @@ Voice* VoiceManager::findFreeVoice() {
 
 void VoiceManager::onNoteOn(int noteNumber, int velocity) {
     Voice* voice = findFreeVoice();
-	printf("noteon: %d\n", noteNumber);
+	printf("noteon: %d, voice=%p\n", noteNumber, voice);
     if (!voice) {
         return;
     }
+	ds10_noteon(voice - voices, noteNumber, velocity);
     voice->reset();
     voice->setNoteNumber(noteNumber);
     voice->mVelocity = velocity;
@@ -42,6 +43,8 @@ void VoiceManager::onNoteOff(int noteNumber, int velocity) {
     for (int i = 0; i < NumberOfVoices; i++) {
         Voice& voice = voices[i];
         if (voice.isActive && voice.mNoteNumber == noteNumber) {
+			ds10_noteoff(i);
+			voice.isActive = false;
             voice.mVolumeEnvelope.enterStage(EnvelopeGenerator::ENVELOPE_STAGE_RELEASE);
             voice.mFilterEnvelope.enterStage(EnvelopeGenerator::ENVELOPE_STAGE_RELEASE);
         }

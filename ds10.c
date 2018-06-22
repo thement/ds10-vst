@@ -58,13 +58,12 @@ ds10_get_sample(void)
 	DsDevice *dev = &devices[0];
 
 	if (in_ptr >= in_buf) {
-		int size = sizeof(sample_buf);
 		memset(sample_buf, 0, sizeof(sample_buf));
-		for (int i = 0; i < ds10_polyphony; i++) {
-			basemem = ds10_mem[i];
+		for (int v = 0; v < ds10_polyphony; v++) {
+			basemem = ds10_mem[v];
 			execute_fn(dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
 			int16_t *buf = vaddr(dev->buf_addr, DS10_BUF_NSAMP * 2, 0);
-			for (i = 0; i < DS10_BUF_NSAMP; i++)
+			for (int i = 0; i < DS10_BUF_NSAMP; i++)
 				sample_buf[i] += buf[i] / 32768.0;
 		}
 		in_ptr = 0;
@@ -78,8 +77,10 @@ void
 ds10_knob(int voice, unsigned id, unsigned val)
 {
 	DsDevice *dev = &devices[0];
+
 	if (voice >= ds10_polyphony)
 		return;
+
 	basemem = ds10_mem[voice];
 	if (dev->knob_fn != 0) {
 		execute_fn(dev->knob_fn, INIT_LR, INIT_SP, dev->addr, id, val, 0);
