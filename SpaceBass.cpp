@@ -208,7 +208,7 @@ void SpaceBass::ProcessDoubleReplacing(
   processVirtualKeyboard();
   for (int i = 0; i < nFrames; ++i) {
     mMIDIReceiver.advance();
-    leftOutput[i] = rightOutput[i] = voiceManager.nextSample();
+    leftOutput[i] = rightOutput[i] = ds10_get_sample()/32768.0;
   }
   
   mMIDIReceiver.Flush(nFrames);

@@ -12,7 +12,7 @@ enum {
 	DS10_N_DEVICES,
 };
 
-void ds10_synth(int dev_id, int16_t *ptr, int size);
+int16_t ds10_get_sample(void);
 void ds10_knob(int dev_id, unsigned id, unsigned val);
 void ds10_noteon(int dev_id, int key, int vel);
 void ds10_noteoff(int dev_id);

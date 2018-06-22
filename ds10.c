@@ -44,18 +44,25 @@ static DsDevice devices[DS10_N_DEVICES] = {
 
 #define INIT_SP 0x01FFA000
 #define INIT_LR 0xe0000000
-void
-ds10_synth(int dev_id, int16_t *ptr, int size)
+
+static int16_t sample_buf[DS10_BUF_NSAMP];
+static int in_buf = 0, in_ptr = 0;
+
+int16_t
+ds10_get_sample(void)
 {
-	DsDevice *dev = &devices[dev_id];
+	DsDevice *dev = &devices[0];
 
-	execute_fn(dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
-
-	if (ptr) {
-		assert(size == DS10_BUF_NSAMP*2);
-		memcpy(ptr, vaddr(dev->buf_addr, size, 0), size);
+	if (in_ptr >= in_buf) {
+		int size = sizeof(sample_buf);
+		execute_fn(dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
+		memcpy(sample_buf, vaddr(dev->buf_addr, size, 0), size);
+		in_ptr = 0;
+		in_buf = DS10_BUF_NSAMP;
 	}
+	return sample_buf[in_ptr++];
 }
+
 
 void
 ds10_knob(int dev_id, unsigned id, unsigned val)
