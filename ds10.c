@@ -255,8 +255,7 @@ ds10_exit(Ds10State *dss)
 void
 ds10_set_resampler(Ds10State *dss, int oversample, double sampling_rate, double extra_ratio)
 {
-	dss->resampler.oversample = oversample;
-	dss->resampler.phase_inc = 32768.0 / sampling_rate * (oversample ? 4 : 1) * extra_ratio;
+	resamp_reset(&dss->resampler, oversample, 32768.0 / sampling_rate * extra_ratio);
 	printf("over=%d rate=%lf extra_ratio=%lf\n", oversample, sampling_rate, extra_ratio);
 }
 

@@ -63,6 +63,20 @@ void resamp_refill(Resampler *r, double *in, int len)
 	}
 }
 
+void
+resamp_reset(Resampler *r, int oversample, double phase_inc)
+{
+	if (oversample != r->oversample) {
+		r->r = r->w = 0;
+		memset(&r->f1, 0, sizeof(r->f1));
+		memset(&r->f2, 0, sizeof(r->f2));
+		r->oversample = oversample;
+	}
+	if (r->oversample)
+		phase_inc *= 4;
+	r->phase_inc = phase_inc;
+}
+
 int resamp_get(Resampler *r, double *py)
 {
 	int index = (int)r->t;

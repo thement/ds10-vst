@@ -21,3 +21,4 @@ struct Resampler {
 
 void resamp_refill(Resampler *r, double *in, int len);
 int resamp_get(Resampler *r, double *py);
+void resamp_reset(Resampler *r, int oversample, double phase_inc);
