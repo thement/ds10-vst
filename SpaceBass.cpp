@@ -58,7 +58,7 @@ const Property parameterProperties[kNumParams] = {
 	{ PKnob4,	"vco2",		220, 58,	7,	1, 0, 3		},
 	{ PKnob,	"vco2pitch",220, 140,	8,	0, -63, 63	},
 	{ PKnob,	"balance",	126, 140,	9,	0, 0, 127	},
-	{ PSwitch2,	"vco2sync",	232, 218,	10,	0, 0, 1		},
+	{ PSwitch2,	"vco2sync",	232, 218,	10,	1, 0, 1		},
 	{ PKnob,	"cutoff",	324, 58,	11,	127, 0, 127	},
 	{ PKnob,	"peak",		324, 140,	12, 0, 0, 127	},
 	{ PSwitch3,	"vcf.type",	338, 306,	13, 0, 0, 2		},
@@ -80,7 +80,7 @@ const Property parameterProperties[kNumParams] = {
 	{ PModsrc7, "modsrc3",	370, 628,	29, 0, 0, 6		},
 	{ PModsrc7, "modsrc4",	458, 628,	30, 0, 0, 6		},
 	{ PVoices4, "poly",		19, 712,	-1,	0, 0, 3		},
-	{ PSwitch2,	"oversample",368, 700,	-1, 1, 0, 1		},
+	{ PSwitch2,	"oversample",368, 700,	-1, 0, 0, 1		},
 	{ PKnob,	"distract",	432, 696,	-1, 127, 0, 127	},
 };
 
@@ -236,15 +236,16 @@ void SpaceBass::OnParamChange(int paramIdx)
 
   if (paramIdx < kMetaParams) {
 	  /* mg.bpm has off in lower position */
-	  if (prop->ds_id == 25)
+	  if (prop->ds_id == 25 || prop->ds_id == 10)
 		  val = !val;
+	  printf("set %d to %d\n", prop->ds_id, val);
 	  ds10_knob_all(ds10state, prop->ds_id, val);
   } else switch (paramIdx) {
   case mPolySwitch:
 	  ds10_set_polyphony(ds10state, val + 1);
 	  break;
   case mOversampleSwitch:
-	  mOversample = param->Int();
+	  mOversample = !param->Int();
 	  SetSampleRate();
 	  break;
   case mDistractKnob:
