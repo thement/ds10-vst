@@ -245,6 +245,7 @@
     <ClInclude Include="MIDIReceiver.h" />
     <ClInclude Include="Oscillator.h" />
     <ClInclude Include="PolyBLEPOscillator.h" />
+    <ClInclude Include="resampler.h" />
     <ClInclude Include="SpaceBass.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Voice.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="MIDIReceiver.cpp" />
     <ClCompile Include="Oscillator.cpp" />
     <ClCompile Include="PolyBLEPOscillator.cpp" />
+    <ClCompile Include="resampler.c" />
     <ClCompile Include="SpaceBass.cpp" />
     <ClCompile Include="Voice.cpp" />
     <ClCompile Include="VoiceManager.cpp" />

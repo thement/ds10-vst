@@ -15,6 +15,7 @@
     <ClCompile Include="arm_math.c" />
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10.c" />
+    <ClCompile Include="resampler.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SpaceBass.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Voice.h" />
     <ClInclude Include="ds10.h" />
     <ClInclude Include="c-code.h" />
+    <ClInclude Include="resampler.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />

@@ -1,6 +1,6 @@
 #ifndef DS10_H
 #define DS10_H
-
+#include "resampler.h"
 #define DS10_BUF_NSAMP (0x40)
 
 #include <stdint.h>
@@ -52,6 +52,8 @@ struct Ds10State {
 	Pressed pressed[MaxPressed];
 	int used_voices[MaxVoices];
 	int last_used, n_pressed;
+
+	Resampler resampler;
 };
 
 struct DsDevice {
@@ -66,12 +68,14 @@ struct DsDevice {
 void execute1(MemState *ms, uint32_t in_R15, uint32_t in_R14, uint32_t in_R13, uint32_t in_R0, uint32_t in_R1, uint32_t in_R2, uint32_t in_R3);
 
 double ds10_get_sample(Ds10State *dss);
+double ds10_get_sample0(Ds10State *dss);
 void ds10_knob(Ds10State *dss, int voice, unsigned id, unsigned val);
 void ds10_knob_all(Ds10State *dss, unsigned id, unsigned val);
 void ds10_noteon(Ds10State *dss, int note, int velocity);
 void ds10_noteoff(Ds10State *dss, int note);
 void ds10_set_polyphony(Ds10State *dst, int polyphony);
 void ds10_exit(Ds10State *dst);
+
 Ds10State *ds10_init(void);
 
 void *fault_handler(MemState *ms, uint32_t addr, uint32_t len);

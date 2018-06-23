@@ -200,7 +200,7 @@ void SpaceBass::ProcessDoubleReplacing(
 
   for (int i = 0; i < nFrames; ++i) {
     mMIDIReceiver.advance();
-    leftOutput[i] = rightOutput[i] = ds10_get_sample(ds10state);
+    leftOutput[i] = rightOutput[i] = ds10_get_sample0(ds10state);
   }
   
   mMIDIReceiver.Flush(nFrames);

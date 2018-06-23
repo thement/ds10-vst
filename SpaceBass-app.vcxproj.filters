@@ -59,6 +59,7 @@
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="ds10.h" />
     <ClInclude Include="c-code.h" />
+    <ClInclude Include="resampler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\WDL\rtaudiomidi\RtAudio.cpp">
@@ -96,6 +97,7 @@
     <ClCompile Include="arm_math.c" />
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10.c" />
+    <ClCompile Include="resampler.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />

@@ -30,25 +30,41 @@ static const DsDevice devices[DS10_N_DEVICES] = {
 	{ 0x0224A1A0, 0x02248680, 0xC0, 0x02072e8c, 0 },
 };
 
-double
-ds10_get_sample(Ds10State *dss)
+static void
+ds10_render_samplebuf(Ds10State *dss)
 {
 	const DsDevice *dev = &devices[0];
 
+	memset(dss->sample_buf, 0, sizeof(dss->sample_buf));
+	for (int v = 0; v < dss->ds10_polyphony; v++) {
+		execute1(&dss->mem_state[v], dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
+		int16_t *buf = vaddr(&dss->mem_state[v], dev->buf_addr, DS10_BUF_NSAMP * 2, 0);
+		for (int i = 0; i < DS10_BUF_NSAMP; i++)
+			dss->sample_buf[i] += buf[i] / 32768.0;
+	}
+}
+
+double
+ds10_get_sample(Ds10State *dss)
+{
 	if (dss->in_ptr >= dss->in_buf) {
-		memset(dss->sample_buf, 0, sizeof(dss->sample_buf));
-		for (int v = 0; v < dss->ds10_polyphony; v++) {
-			execute1(&dss->mem_state[v], dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
-			int16_t *buf = vaddr(&dss->mem_state[v], dev->buf_addr, DS10_BUF_NSAMP * 2, 0);
-			for (int i = 0; i < DS10_BUF_NSAMP; i++)
-				dss->sample_buf[i] += buf[i] / 32768.0;
-		}
+		ds10_render_samplebuf(dss);
 		dss->in_ptr = 0;
 		dss->in_buf = DS10_BUF_NSAMP;
 	}
 	return dss->sample_buf[dss->in_ptr++];
 }
 
+double
+ds10_get_sample0(Ds10State *dss)
+{
+	double y;
+	while (!resamp_get(&dss->resampler, &y)) {
+		ds10_render_samplebuf(dss);
+		resamp_refill(&dss->resampler, dss->sample_buf, DS10_BUF_NSAMP);
+	}
+	return y;
+}
 
 void
 ds10_knob(Ds10State *dss, int voice, unsigned id, unsigned val)
@@ -241,6 +257,8 @@ ds10_init(void)
 {
 	Ds10State *dss = calloc(1, sizeof(*dss));
 
+	dss->resampler.phase_inc = 32768.0 / 44100 * 4;
+
 	for (int i = 0; i < MaxVoices; i++) {
 		dss->mem_state[i].basemem = readseg("c:\\01ff8000x.bin");
 	}
@@ -276,3 +294,4 @@ int printf2(const char *format, ...)
 
 	return ret;
 }
+
