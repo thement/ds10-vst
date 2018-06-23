@@ -70,7 +70,7 @@ const Property parameterProperties[kNumParams] = {
 	{ PKnob,	"decay",	426, 140,	21, 127, 0, 127	},
 	{ PKnob,	"sustain",	426, 222,	22, 127, 0, 127	},
 	{ PKnob,	"release",	426, 304,	23, 0, 0, 127	},
-	{ PKnob,	"mg.freq",	12, 537,	24, 0, 0, 127	},
+	{ PKnob,	"mg.freq",	12, 537,	24, 50, 0, 127	},
 	{ PSwitch2, "mg.bpm",	20, 458,	25, 1, 0, 1		},
 	{ PModsrc7, "modsrc0",	112, 628,	26, 0, 0, 6		},
 	{ PModsrc7, "modsrc1",	198, 628,	27, 0, 0, 6		},
