@@ -20,7 +20,7 @@ const double parameterStep = 0.001;
 
 enum EParams
 {
-	kNumParams = 26 + 7,
+	kNumParams = 26 + 7 - 1,
   // Oscillator Section:
   mOsc1Waveform = 0,
   mOsc1PitchMod,
@@ -71,39 +71,38 @@ enum {
 	PNumTypes
 };
 const Params parameterProperties[kNumParams] = {
-	{ PKnob5,  "kn0x0", 20, 58, 0, 0, -2, 2 },
-	{ PKnob4,  "kn1x0", 126, 58, 1, 0, 0, 127 },
-	{ PKnob4,  "kn2x0", 220, 58, 1, 0, 0, 127 },
-	{ PKnob,  "kn3x0", 324, 58, 1, 0, 0, 127 },
-	{ PKnob,  "kn4x0", 426, 58, 1, 0, 0, 127 },
-	{ PKnob,  "kn0x1", 20, 140, 1, 0, 0, 127 },
-	{ PKnob,  "kn1x1", 126, 140, 1, 0, 0, 127 },
-	{ PKnob,  "kn2x1", 220, 140, 1, 0, 0, 127 },
-	{ PKnob,  "kn3x1", 324, 140, 1, 0, 0, 127 },
-	{ PKnob,  "kn4x1", 426, 140, 1, 0, 0, 127 },
-	{ PKnob,  "kn0x2", 20, 222, 1, 0, 0, 127 },
-	{ PKnob,  "kn1x2", 126, 222, 1, 0, 0, 127 },
-	{ PSwitch2,"kn2x2", 232, 218, 1, 0, 0, 127 },
-	{ PKnob,  "kn3x2", 324, 222, 1, 0, 0, 127 },
-	{ PKnob,  "kn4x2", 426, 222, 1, 0, 0, 127 },
-	{ PKnob,  "kn0x3", 20, 304, 1, 0, 0, 127 },
-	{ PKnob,  "kn1x3", 126, 304, 1, 0, 0, 127 },
-	{ PSwitch2,  "kn2x3", 232, 306, 1, 0, 0, 127 },
-	{ PSwitch3,  "kn3x3", 338, 306, 1, 0, 0, 127 },
-	{ PKnob,  "kn4x3", 426, 304, 1, 0, 0, 127 },
-	{ PKnob,  "kn0x5", 12, 537, 1, 0, 0, 127 },
-	{ PKnob,  "kn1x5", 98, 537, 1, 0, 0, 127 },
-	{ PKnob,  "kn2x5", 184, 537, 1, 0, 0, 127 },
-	{ PKnob,  "kn3x5", 270, 537, 1, 0, 0, 127 },
-	{ PKnob,  "kn4x5", 356, 537, 1, 0, 0, 127 },
-	{ PKnob,  "kn5x5", 442, 537, 1, 0, 0, 127 },
-	{ PSwitch2, "sw0x6", 20, 458, 1, 0, 0, 1 },
-	{ PVoices4, "poly", 19, 712, 0, 0, 0, 3 },
-	{ PModsrc7, "modsrc0", 112, 628, 1, 0, 0, 6 },
-	{ PModsrc7, "modsrc1", 198, 628, 1, 0, 0, 6 },
-	{ PModsrc7, "modsrc2", 284, 628, 1, 0, 0, 6 },
-	{ PModsrc7, "modsrc3", 370, 628, 1, 0, 0, 6 },
-	{ PModsrc7, "modsrc4", 458, 628, 1, 0, 0, 6 },
+	{ PKnob5,	"octave",	20, 58,		0,	0, -2, 2	},
+	{ PKnob,	"vco.int",	20, 222,	1,	0, -63, 63 },
+	{ PKnob,	"porta",	20, 140,	2,	0, 0, 127	},
+	{ PKnob,	"pitch.in",	98, 537,	3,	0, -63, 63	},
+	{ PKnob,	"pitch1.in",184, 537,	4,	0, -63, 63	},
+	{ PKnob,	"pitch2.in",270, 537,	5,	0, -63, 63	},
+	{ PKnob4,	"vco1",		126, 58,	6,	0, 0, 3		},
+	{ PKnob4,	"vco2",		220, 58,	7,	0, 0, 3		},
+	{ PKnob,	"vco2pitch",220, 140,	8,	0, -63, 63	},
+	{ PKnob,	"balance",	126, 140,	9,	0, 0, 127	},
+	{ PSwitch2,	"vco2sync",	232, 218,	10,	0, 0, 1		},
+	{ PKnob,	"cutoff",	324, 58,	11,	127, 0, 127	},
+	{ PKnob,	"peak",		324, 140,	12, 0, 0, 127	},
+	{ PSwitch3,	"vcf.type",	338, 306,	13, 0, 0, 2		},
+	{ PKnob,	"eg.int",	324, 222,	14,	0, -63, 63	},
+	{ PKnob,	"cutoff.in",356, 537,	15, 0, -63, 63	},
+	{ PSwitch2,	"vca.eg",	232, 306,	16, 0, 0, 1		},
+	{ PKnob,	"vca.in",	442, 537,	17, 0, -63, 63	},
+	{ PKnob,	"drive",	126, 304,	18, 0, 0, 127	},
+	{ PKnob,	"level",	20, 304,	19, 0, 0, 100	},
+	{ PKnob,	"attack",	426, 58,	20, 0, 0, 127	},
+	{ PKnob,	"decay",	426, 140,	21, 127, 0, 127	},
+	{ PKnob,	"sustain",	426, 222,	22, 127, 0, 127	},
+	{ PKnob,	"release",	426, 304,	23, 0, 0, 127	},
+	{ PKnob,	"mg.freq",	12, 537,	24, 0, 0, 127	},
+	{ PSwitch2, "mg.bpm",	20, 458,	25, 0, 0, 1		},
+	{ PModsrc7, "modsrc0",	112, 628,	26, 0, 0, 6		},
+	{ PModsrc7, "modsrc1",	198, 628,	27, 0, 0, 6		},
+	{ PModsrc7, "modsrc2",	284, 628,	28, 0, 0, 6		},
+	{ PModsrc7, "modsrc3",	370, 628,	29, 0, 0, 6		},
+	{ PModsrc7, "modsrc4",	458, 628,	30, 0, 0, 6		},
+	{ PVoices4, "poly",		19, 712,	-1,	0, 0, 3		},
 };
 
 enum ELayout
@@ -140,7 +139,7 @@ void SpaceBass::CreateParams() {
 		switch (param->type) {
 		default:
 		case PKnob:
-			par->InitDouble(name, 64, 0, 127, 1);
+			par->InitDouble(name, param->def, param->min, param->max, 0.01);
 			break;
 		case PSwitch2:
 		case PSwitch3:
@@ -151,6 +150,9 @@ void SpaceBass::CreateParams() {
 			par->InitEnum(name, param->def, param->max - param->min + 1);
 			break;
 		}
+	}
+	for (int i = 0; i < kNumParams; i++) {
+		OnParamChange(i);
 	}
 }
 
