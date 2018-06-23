@@ -45,7 +45,7 @@ static DsDevice devices[DS10_N_DEVICES] = {
 #define INIT_SP 0x01FFA000
 #define INIT_LR 0xe0000000
 
-#define MAX_VOICES 8
+#define MAX_VOICES 4
 
 static uint8_t *ds10_mem[MAX_VOICES];
 static double sample_buf[DS10_BUF_NSAMP];
@@ -78,7 +78,7 @@ ds10_knob(int voice, unsigned id, unsigned val)
 {
 	DsDevice *dev = &devices[0];
 
-	if (voice >= ds10_polyphony)
+	if (voice >= MAX_VOICES)
 		return;
 
 	basemem = ds10_mem[voice];
@@ -90,7 +90,8 @@ ds10_knob(int voice, unsigned id, unsigned val)
 void
 ds10_knob_all(unsigned id, unsigned val)
 {
-	for (int i = 0; i < ds10_polyphony; i++)
+	/* change knob for all voices, in case they became active later */
+	for (int i = 0; i < MAX_VOICES; i++)
 		ds10_knob(i, id, val);
 }
 
@@ -118,12 +119,6 @@ ds10_noteoff(int voice)
 	writel(dev->addr + 8, 1);
 }
 
-void
-ds10_reverse(void)
-{
-
-}
-
 extern uint8_t *basemem;
 #define SEGSIZE (0x8000 + 0x400000)
 static void *
@@ -143,9 +138,20 @@ readseg(const char *path)
 }
 FILE *xlog;
 void
-ds10_init(int polyphony)
+ds10_set_polyphony(int polyphony)
 {
-	assert(polyphony < MAX_VOICES);
+	if (polyphony >= MAX_VOICES)
+		polyphony = MAX_VOICES;
+	if (polyphony < 1)
+		polyphony = 1;
+	ds10_polyphony = polyphony;
+
+	printf("polyphont set to %d\n", ds10_polyphony);
+}
+
+void
+ds10_init(void)
+{
 	xlog = fopen("C:\\Users\\Poly Cajt\\log.txt", "w");
 #if 0
 	readseg("02000000.bin");
@@ -153,11 +159,10 @@ ds10_init(int polyphony)
 	/* this is our "stack" and scratchpad */
 	newseg(0xf0000000, 0x00400000, seg_count++);
 #else
-	for (int i = 0; i < polyphony; i++)
+	for (int i = 0; i < MAX_VOICES; i++)
 		ds10_mem[i] = readseg("c:\\01ff8000x.bin");
-	ds10_polyphony = polyphony;
+	ds10_polyphony = 1;
 #endif
-
 	execute_fn = execute1;
 }
 

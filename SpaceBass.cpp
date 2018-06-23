@@ -93,7 +93,7 @@ enum ELayout
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
 
-  ds10_init(4);
+  ds10_init();
   CreateParams();
   CreateGraphics();
   CreatePresets();
@@ -207,16 +207,18 @@ void SpaceBass::OnParamChange(int paramIdx)
   IMutexLock lock(this);
   IParam *param = GetParam(paramIdx);
   const Property *prop = &parameterProperties[paramIdx];
-
+  int val = param->Value();
   //printf("param %d: %lf\n", paramIdx, param->Value());
-  //param->Int(); param->Int();
+
   if (paramIdx < kMetaParams) {
-	  int val = param->Value();
 	  /* mg.bpm has off in lower position */
 	  if (prop->ds_id == 25)
 		  val = !val;
 	  ds10_knob_all(prop->ds_id, val);
   } else switch (paramIdx) {
+  case mPolySwitch:
+	  ds10_set_polyphony(val + 1);
+	  break;
   }
 }
 
