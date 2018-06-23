@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <math.h>
-#include "ds10.h"
+#include "ds10-core.h"
 
 void *
 fault_handler(MemState *ms, uint32_t addr, uint32_t len)

@@ -12,7 +12,7 @@
 
 #include <functional>
 extern "C" {
-#include "ds10.h"
+#include "ds10-core.h"
 }
 const int kNumPrograms = 32;
 

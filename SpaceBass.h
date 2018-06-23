@@ -9,7 +9,7 @@
 #include "MIDIReceiver.h"
 
 extern "C" {
-#include "ds10.h"
+#include "ds10-core.h"
 };
 
 class SpaceBass : public IPlug

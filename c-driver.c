@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
-#include "ds10.h"
+#include "ds10-core.h"
 
 #define MEM32(a) ((uint32_t *)vaddr(ms, a, 4, 0))
 #define MEM16(a) ((uint16_t *)vaddr(ms, a, 2, 0))

@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "ds10.h"
+#include "ds10-core.h"
 
 
 static void

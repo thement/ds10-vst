@@ -238,7 +238,7 @@
     <ClInclude Include="..\..\WDL\IPlug\IPlugVST.h" />
     <ClInclude Include="c-code.h" />
     <ClInclude Include="Delegate.h" />
-    <ClInclude Include="ds10.h" />
+    <ClInclude Include="ds10-core.h" />
     <ClInclude Include="GallantSignal.h" />
     <ClInclude Include="MIDIReceiver.h" />
     <ClInclude Include="resampler.h" />
@@ -249,7 +249,7 @@
     <ClCompile Include="..\..\WDL\IPlug\IPlugVST.cpp" />
     <ClCompile Include="arm_math.c" />
     <ClCompile Include="c-driver.c" />
-    <ClCompile Include="ds10.c" />
+    <ClCompile Include="ds10-core.c" />
     <ClCompile Include="mem_image.c" />
     <ClCompile Include="MIDIReceiver.cpp" />
     <ClCompile Include="resampler.c" />

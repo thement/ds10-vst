@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "ds10.h"
+#include "ds10-core.h"
 
 static double run_filter(Filterx2 *fx2, double x)
 {
