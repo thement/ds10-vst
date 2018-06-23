@@ -2,17 +2,17 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="SpaceBass" />
+		<Option title="ds10" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Win32">
-				<Option output="build-win-cb\SpaceBass" prefix_auto="1" extension_auto="1" />
+				<Option output="build-win-cb\ds10" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="build-win-cb\" />
 				<Option object_output="build-win-cb\Debug\" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option parameters="SpaceBass.dll" />
+				<Option parameters="ds10.dll" />
 				<Option host_application="C:\Program Files\vsthost\vsthost.exe" />
 				<Compiler>
 					<Add option="-g" />
@@ -28,12 +28,12 @@
 				</Compiler>
 			</Target>
 			<Target title="Release Win32">
-				<Option output="build-win-cb\SpaceBass" prefix_auto="1" extension_auto="1" />
+				<Option output="build-win-cb\ds10" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="build-win-cb\" />
 				<Option object_output="build-win-cb\Release" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option parameters="SpaceBass.dll" />
+				<Option parameters="ds10.dll" />
 				<Option host_application="C:\Program Files\vsthost\vsthost.exe" />
 				<Compiler>
 					<Add option="-O2" />
@@ -51,12 +51,12 @@
 				</Compiler>
 			</Target>
 			<Target title="Tracer Win32">
-				<Option output="build-win-cb\SpaceBass" prefix_auto="1" extension_auto="1" />
+				<Option output="build-win-cb\ds10" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="build-win-cb\" />
 				<Option object_output="build-win-cb\Tracer" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option parameters="SpaceBass.dll" />
+				<Option parameters="ds10.dll" />
 				<Option host_application="C:\Program Files\vsthost\vsthost.exe" />
 				<Compiler>
 					<Add option="-DTRACER_BUILD" />
@@ -96,9 +96,9 @@
 			<Add library="libodbccp32" />
 			<Add library="liboleaut32" />
 		</Linker>
-		<Unit filename="SpaceBass.cpp" />
-		<Unit filename="SpaceBass.h" />
-		<Unit filename="SpaceBass.rc">
+		<Unit filename="ds10.cpp" />
+		<Unit filename="ds10.h" />
+		<Unit filename="ds10.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="resource.h" />

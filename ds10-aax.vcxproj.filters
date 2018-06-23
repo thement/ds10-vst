@@ -51,7 +51,7 @@
     <ClCompile Include="..\..\WDL\IPlug\AAX\IPlugAAX_Describe.cpp">
       <Filter>IPlug\AAX</Filter>
     </ClCompile>
-    <ClCompile Include="SpaceBass.cpp" />
+    <ClCompile Include="ds10.cpp" />
     <ClCompile Include="..\..\AAX_SDK\Interfaces\AAX_Exports.cpp">
       <Filter>Libs</Filter>
     </ClCompile>
@@ -111,11 +111,11 @@
     <ClInclude Include="..\..\WDL\IPlug\IPlugAAX.h">
       <Filter>IPlug\AAX</Filter>
     </ClInclude>
-    <ClInclude Include="SpaceBass.h" />
+    <ClInclude Include="ds10.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SpaceBass.rc" />
+    <ResourceCompile Include="ds10.rc" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\AAX_SDK\Libs\Debug\AAXLibrary_x64_D.lib">

@@ -1,4 +1,4 @@
-#include "SpaceBass.h"
+#include "ds10.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmain"
 #include "IPlug_include_in_plug_src.h"
@@ -100,7 +100,7 @@ enum ELayout
 
 
 
-SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
+ds10::ds10(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
 
   print2_init();
@@ -114,24 +114,24 @@ SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kN
   CreateGraphics();
   CreatePresets();
   
-  mMIDIReceiver.noteOn.Connect(this, &SpaceBass::onNoteOn);
-  mMIDIReceiver.noteOff.Connect(this, &SpaceBass::onNoteOff);
+  mMIDIReceiver.noteOn.Connect(this, &ds10::onNoteOn);
+  mMIDIReceiver.noteOff.Connect(this, &ds10::onNoteOff);
 }
 
-SpaceBass::~SpaceBass() {
+ds10::~ds10() {
 	ds10_exit(ds10state);
 }
 
 
-void SpaceBass::onNoteOn(int noteNumber, int velocity) {
+void ds10::onNoteOn(int noteNumber, int velocity) {
 	ds10_noteon(ds10state, noteNumber, velocity);
 }
 
-void SpaceBass::onNoteOff(int noteNumber, int velocity) {
+void ds10::onNoteOff(int noteNumber, int velocity) {
 	ds10_noteoff(ds10state, noteNumber);
 }
 
-void SpaceBass::CreateParams() {
+void ds10::CreateParams() {
 	for (int i = 0; i < kNumParams; i++) {
 		IParam *param = GetParam(i);
 		const Property *prop = &parameterProperties[i];
@@ -157,7 +157,7 @@ void SpaceBass::CreateParams() {
 	}
 }
 
-void SpaceBass::CreateGraphics() {
+void ds10::CreateGraphics() {
 	IGraphics* pGraphics = MakeGraphics(this, kWidth, kHeight);
 	pGraphics->AttachBackground(BG_ID, BG_FN);
 
@@ -197,7 +197,7 @@ void SpaceBass::CreateGraphics() {
 	AttachGraphics(pGraphics);
 }
 
-void SpaceBass::CreatePresets() {
+void ds10::CreatePresets() {
 	MakePreset("Init", 2, 0.0, 14.0, 4.0, 0.0, 0.0, 2, 1, 32.0, 60.0, 1, 57.0, 51.0, 0, 14.0, 0.0, 0, 0.0, 32.0, 105.0, 0.0, 66.0, 127.0, 74.0, 77.0, 1, 1, 0, 0, 0, 0, 0, 0, 127.0);
 	MakePreset("XLEAD_", 2, 0.0, 14.0, 4.0, 0.0, 0.0, 2, 1, 32.0, 60.0, 1, 57.0, 51.0, 0, 14.0, 0.0, 0, 0.0, 32.0, 105.0, 0.0, 66.0, 127.0, 74.0, 77.0, 1, 1, 0, 0, 0, 0, 0, 0, 127.0);
 	MakePreset("BASS01", 1, 0.0, 0.0, 0.0, 0.0, 0.0, 2, 1, 20.0, 41.0, 0, 15.0, 81.0, 0, 25.0, 0.0, 0, 0.0, 110.0, 105.0, 35.0, 71.0, 0.0, 64.0, 19.0, 1, 0, 0, 0, 0, 0, 0, 0, 127.0);
@@ -225,7 +225,7 @@ void SpaceBass::CreatePresets() {
 	MakePreset("TMP___", 2, 0.0, 20.0, 0.0, 0.0, 0.0, 1, 2, 37.0, 0.0, 1, 31.0, 72.0, 0, 27.0, 0.0, 0, 0.0, 28.0, 105.0, 34.0, 66.0, 127.0, 67.0, 19.0, 1, 0, 0, 0, 0, 0, 0, 0, 127.0);
 }
 
-void SpaceBass::ProcessDoubleReplacing(
+void ds10::ProcessDoubleReplacing(
                                        double** inputs,
                                        double** outputs,
                                        int nFrames)
@@ -243,12 +243,12 @@ void SpaceBass::ProcessDoubleReplacing(
   mMIDIReceiver.Flush(nFrames);
 }
 
-void SpaceBass::SetSampleRate(void)
+void ds10::SetSampleRate(void)
 {
 	ds10_set_resampler(ds10state, mOversample, mSampleRate, mExtraRatio);
 }
 
-void SpaceBass::Reset()
+void ds10::Reset()
 {
   TRACE;
   IMutexLock lock(this);
@@ -257,7 +257,7 @@ void SpaceBass::Reset()
   SetSampleRate();
 }
 
-void SpaceBass::OnParamChange(int paramIdx)
+void ds10::OnParamChange(int paramIdx)
 {
 	
   IMutexLock lock(this);
@@ -286,6 +286,6 @@ void SpaceBass::OnParamChange(int paramIdx)
   }
 }
 
-void SpaceBass::ProcessMidiMsg(IMidiMsg* pMsg) {
+void ds10::ProcessMidiMsg(IMidiMsg* pMsg) {
   mMIDIReceiver.onMessageReceived(pMsg);
 }

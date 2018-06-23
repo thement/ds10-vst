@@ -4,7 +4,7 @@
     <Import Project="..\..\common.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <BINARY_NAME>SpaceBass</BINARY_NAME>
+    <BINARY_NAME>ds10</BINARY_NAME>
     <APP_DEFS>SA_API;__WINDOWS_DS__;__WINDOWS_MM__;__WINDOWS_ASIO__;</APP_DEFS>
     <VST_DEFS>VST_API;VST_FORCE_DEPRECATED;</VST_DEFS>
     <VST3_DEFS>VST3_API</VST3_DEFS>

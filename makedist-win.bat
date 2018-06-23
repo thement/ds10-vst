@@ -6,7 +6,7 @@ REM - zipping requires 7zip in %ProgramFiles%\7-Zip\7z.exe
 REM - building installer requires innotsetup in "%ProgramFiles(x86)%\Inno Setup 5\iscc"
 REM - AAX codesigning requires ashelper tool added to %PATH% env variable and aax.key/.crt in .\..\..\..\Certificates\
 
-echo Making SpaceBass win distribution ...
+echo Making ds10 win distribution ...
 
 echo ------------------------------------------------------------------
 echo Updating version numbers ...
@@ -33,15 +33,15 @@ REM - set preprocessor macros like this, for instance to enable demo build:
 REM - SET CMDLINE_DEFINES="DEMO_VERSION"
 
 REM - Could build individual targets like this:
-REM - msbuild SpaceBass-app.vcxproj /p:configuration=release /p:platform=win32
+REM - msbuild ds10-app.vcxproj /p:configuration=release /p:platform=win32
 
-msbuild SpaceBass.sln /p:configuration=release /p:platform=win32 /nologo /noconsolelogger /fileLogger /v:quiet /flp:logfile=build-win.log;errorsonly 
-msbuild SpaceBass.sln /p:configuration=release /p:platform=x64 /nologo /noconsolelogger /fileLogger /v:quiet /flp:logfile=build-win.log;errorsonly;append
+msbuild ds10.sln /p:configuration=release /p:platform=win32 /nologo /noconsolelogger /fileLogger /v:quiet /flp:logfile=build-win.log;errorsonly 
+msbuild ds10.sln /p:configuration=release /p:platform=x64 /nologo /noconsolelogger /fileLogger /v:quiet /flp:logfile=build-win.log;errorsonly;append
 
 echo ------------------------------------------------------------------
 echo Code sign aax binary...
-call ashelper -f .\build-win\aax\bin\SpaceBass.aaxplugin\Contents\Win32\SpaceBass.aaxplugin -l .\..\..\..\Certificates\aax.crt -k .\..\..\..\Certificates\aax.key -o .\build-win\aax\bin\SpaceBass.aaxplugin\Contents\Win32\SpaceBass.aaxplugin
-REM - call ashelper -f .\build-win\aax\bin\SpaceBass.aaxplugin\Contents\x64\SpaceBass.aaxplugin -l .\..\..\..\Certificates\aax.crt -k .\..\..\..\Certificates\aax.key -o .\build-win\aax\bin\SpaceBass.aaxplugin\Contents\x64\SpaceBass.aaxplugin
+call ashelper -f .\build-win\aax\bin\ds10.aaxplugin\Contents\Win32\ds10.aaxplugin -l .\..\..\..\Certificates\aax.crt -k .\..\..\..\Certificates\aax.key -o .\build-win\aax\bin\ds10.aaxplugin\Contents\Win32\ds10.aaxplugin
+REM - call ashelper -f .\build-win\aax\bin\ds10.aaxplugin\Contents\x64\ds10.aaxplugin -l .\..\..\..\Certificates\aax.crt -k .\..\..\..\Certificates\aax.key -o .\build-win\aax\bin\ds10.aaxplugin\Contents\x64\ds10.aaxplugin
 
 REM - Make Installer (InnoSetup)
 
@@ -51,18 +51,18 @@ echo Making Installer ...
 if exist "%ProgramFiles(x86)%" (goto 64-Bit-is) else (goto 32-Bit-is)
 
 :32-Bit-is
-"%ProgramFiles%\Inno Setup 5\iscc" /cc ".\installer\SpaceBass.iss"
+"%ProgramFiles%\Inno Setup 5\iscc" /cc ".\installer\ds10.iss"
 goto END-is
 
 :64-Bit-is
-"%ProgramFiles(x86)%\Inno Setup 5\iscc" /cc ".\installer\SpaceBass.iss"
+"%ProgramFiles(x86)%\Inno Setup 5\iscc" /cc ".\installer\ds10.iss"
 goto END-is
 
 :END-is
 
 REM - ZIP
-REM - "%ProgramFiles%\7-Zip\7z.exe" a .\installer\SpaceBass-win-32bit.zip .\build-win\app\win32\bin\SpaceBass.exe .\build-win\vst3\win32\bin\SpaceBass.vst3 .\build-win\vst2\win32\bin\SpaceBass.dll .\build-win\rtas\bin\SpaceBass.dpm .\build-win\rtas\bin\SpaceBass.dpm.rsr .\build-win\aax\bin\SpaceBass.aaxplugin* .\installer\license.rtf .\installer\readmewin.rtf
-REM - "%ProgramFiles%\7-Zip\7z.exe" a .\installer\SpaceBass-win-64bit.zip .\build-win\app\x64\bin\SpaceBass.exe .\build-win\vst3\x64\bin\SpaceBass.vst3 .\build-win\vst2\x64\bin\SpaceBass.dll .\installer\license.rtf .\installer\readmewin.rtf
+REM - "%ProgramFiles%\7-Zip\7z.exe" a .\installer\ds10-win-32bit.zip .\build-win\app\win32\bin\ds10.exe .\build-win\vst3\win32\bin\ds10.vst3 .\build-win\vst2\win32\bin\ds10.dll .\build-win\rtas\bin\ds10.dpm .\build-win\rtas\bin\ds10.dpm.rsr .\build-win\aax\bin\ds10.aaxplugin* .\installer\license.rtf .\installer\readmewin.rtf
+REM - "%ProgramFiles%\7-Zip\7z.exe" a .\installer\ds10-win-64bit.zip .\build-win\app\x64\bin\ds10.exe .\build-win\vst3\x64\bin\ds10.vst3 .\build-win\vst2\x64\bin\ds10.dll .\installer\license.rtf .\installer\readmewin.rtf
 
 echo ------------------------------------------------------------------
 echo Printing log file to console...

@@ -1,6 +1,6 @@
 //
 //  MIDIReceiver.cpp
-//  SpaceBass
+//  ds10
 //
 //  Created by Martin on 08.04.14.
 //

@@ -1,19 +1,19 @@
 #define PLUG_MFR "MartinFinke"
-#define PLUG_NAME "SpaceBass"
+#define PLUG_NAME "ds10"
 
-#define PLUG_CLASS_NAME SpaceBass
+#define PLUG_CLASS_NAME ds10
 
 #define BUNDLE_MFR "MartinFinke"
-#define BUNDLE_NAME "SpaceBass"
+#define BUNDLE_NAME "ds10"
 
-#define PLUG_ENTRY SpaceBass_Entry
-#define PLUG_VIEW_ENTRY SpaceBass_ViewEntry
+#define PLUG_ENTRY ds10_Entry
+#define PLUG_VIEW_ENTRY ds10_ViewEntry
 
-#define PLUG_ENTRY_STR "SpaceBass_Entry"
-#define PLUG_VIEW_ENTRY_STR "SpaceBass_ViewEntry"
+#define PLUG_ENTRY_STR "ds10_Entry"
+#define PLUG_VIEW_ENTRY_STR "ds10_ViewEntry"
 
-#define VIEW_CLASS SpaceBass_View
-#define VIEW_CLASS_STR "SpaceBass_View"
+#define VIEW_CLASS ds10_View
+#define VIEW_CLASS_STR "ds10_View"
 
 // Format        0xMAJR.MN.BG - in HEX! so version 10.1.5 would be 0x000A0105
 #define PLUG_VER 0x00010000
@@ -34,7 +34,7 @@
 #endif
 
 #define PLUG_MFR_PT "MartinFinke\nMartinFinke\nAcme"
-#define PLUG_NAME_PT "SpaceBass\nIPEF"
+#define PLUG_NAME_PT "ds10\nIPEF"
 #define PLUG_TYPE_PT "Effect"
 #define PLUG_DOES_AUDIOSUITE 1
 

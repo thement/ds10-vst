@@ -16,7 +16,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8F427C1E-B580-4793-BEAC-F2CFEFA003F5}</ProjectGuid>
-    <RootNamespace>SpaceBass-rtas</RootNamespace>
+    <RootNamespace>ds10-rtas</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,15 +40,15 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -114,7 +114,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvprt.lib</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>SpaceBass-rtas.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>ds10-rtas.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(RTAS_PLUGINS_PATH)\$(TargetName).pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
@@ -182,7 +182,7 @@ copy /Y "$(TargetPath)".rsr "$(RTAS_PLUGINS_PATH)\$(BINARY_NAME).dpm.rsr"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvprt.lib</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>SpaceBass-rtas.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>ds10-rtas.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(IntDir)$(TargetName).lib</ImportLibrary>
@@ -247,7 +247,7 @@ copy /Y "$(TargetPath)".rsr "$(RTAS_PLUGINS_PATH)\$(BINARY_NAME).dpm.rsr"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvprt.lib</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>SpaceBass-rtas.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>ds10-rtas.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(RTAS_PLUGINS_PATH)\$(TargetName).pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
@@ -303,7 +303,7 @@ copy /Y "$(TargetPath)".rsr "$(RTAS_PLUGINS_PATH)\$(BINARY_NAME).dpm.rsr"
     <ClInclude Include="..\..\WDL\IPlug\RTAS\IPlugProcessRTAS.h" />
     <ClInclude Include="..\..\WDL\IPlug\RTAS\ProcessInterface.h" />
     <ClInclude Include="..\..\WDL\IPlug\RTAS\digicode.h" />
-    <ClInclude Include="SpaceBass.h" />
+    <ClInclude Include="ds10.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -326,13 +326,13 @@ copy /Y "$(TargetPath)".rsr "$(RTAS_PLUGINS_PATH)\$(BINARY_NAME).dpm.rsr"
     <ClCompile Include="..\..\WDL\IPlug\RTAS\digicode1.cpp" />
     <ClCompile Include="..\..\WDL\IPlug\RTAS\digicode2.cpp" />
     <ClCompile Include="..\..\WDL\IPlug\RTAS\digicode3.cpp" />
-    <ClCompile Include="SpaceBass.cpp" />
+    <ClCompile Include="ds10.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SpaceBass-rtas.def" />
+    <None Include="ds10-rtas.def" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SpaceBass.rc" />
+    <ResourceCompile Include="ds10.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PT9_SDK\AlturaPorts\TDMPlugIns\PlugInLibrary\WinBuild\PlugInLib.vcxproj">

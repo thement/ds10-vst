@@ -27,47 +27,47 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{41785AE4-5B70-4A75-880B-4B418B4E13C6}</ProjectGuid>
-    <RootNamespace>SpaceBass</RootNamespace>
-    <ProjectName>SpaceBass-app</ProjectName>
+    <ProjectGuid>{2EB4846A-93E0-43A0-821E-12237105168F}</ProjectGuid>
+    <RootNamespace>ds10</RootNamespace>
+    <ProjectName>ds10-vst2</ProjectName>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -78,102 +78,92 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SpaceBass.props" />
+    <Import Project="ds10.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>build-win\app\$(Platform)\bin\</OutDir>
+    <OutDir>build-win\vst2\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>build-win\app\$(Platform)\bin\</OutDir>
+    <OutDir>build-win\vst2\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>build-win\app\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>build-win\vst2\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>
     </LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>build-win\app\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>build-win\vst2\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>build-win\app\$(Platform)\bin\</OutDir>
+    <OutDir>build-win\vst2\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>build-win\app\$(Platform)\bin\</OutDir>
+    <OutDir>build-win\vst2\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>build-win\app\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>build-win\vst2\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>build-win\app\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>build-win\vst2\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|Win32'">
-    <OutDir>build-win\app\$(Platform)\bin\</OutDir>
+    <OutDir>build-win\vst2\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|x64'">
-    <OutDir>build-win\app\$(Platform)\bin\</OutDir>
+    <OutDir>build-win\vst2\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|Win32'">
-    <IntDir>build-win\app\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>build-win\vst2\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|x64'">
-    <IntDir>build-win\app\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>build-win\vst2\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>$(APP_DEFS);$(DEBUG_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(APP_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(VST_DEFS);$(DEBUG_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(APP_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>SA_API</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>$(APP_DEFS);$(DEBUG_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(APP_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(VST_DEFS);$(DEBUG_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(APP_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(x64_LIB_PATHS);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>SA_API</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -181,8 +171,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>$(APP_DEFS);$(RELEASE_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(APP_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(VST_DEFS);$(RELEASE_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
@@ -190,12 +179,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(APP_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>SA_API</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -203,8 +188,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>$(APP_DEFS);$(RELEASE_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(APP_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(VST_DEFS);$(RELEASE_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
@@ -212,13 +196,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(APP_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(x64_LIB_PATHS);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>SA_API</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|Win32'">
     <ClCompile>
@@ -226,21 +206,16 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>$(APP_DEFS);$(TRACER_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(APP_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(VST_DEFS);$(TRACER_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(APP_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(WDL_PATH)\lice\build-win\$(Platform)\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>SA_API</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tracer|x64'">
     <ClCompile>
@@ -248,67 +223,40 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>$(APP_DEFS);$(TRACER_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(APP_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(VST_DEFS);$(TRACER_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(APP_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(x64_LIB_PATHS);$(WDL_PATH)\lice\build-win\$(Platform)\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>SA_API</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ASIO_SDK\asio.h" />
-    <ClInclude Include="..\..\ASIO_SDK\asiodrivers.h" />
-    <ClInclude Include="..\..\ASIO_SDK\asiolist.h" />
-    <ClInclude Include="..\..\ASIO_SDK\asiosys.h" />
-    <ClInclude Include="..\..\ASIO_SDK\ginclude.h" />
-    <ClInclude Include="..\..\ASIO_SDK\iasiodrv.h" />
-    <ClInclude Include="..\..\WDL\IPlug\IPlugStandalone.h" />
-    <ClInclude Include="..\..\WDL\rtaudiomidi\RtAudio.h" />
-    <ClInclude Include="..\..\WDL\rtaudiomidi\RtError.h" />
-    <ClInclude Include="..\..\WDL\rtaudiomidi\RtMidi.h" />
-    <ClInclude Include="app_wrapper\app_main.h" />
-    <ClInclude Include="app_wrapper\app_resource.h" />
+    <ClInclude Include="..\..\WDL\IPlug\IPlugVST.h" />
     <ClInclude Include="c-code.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="ds10-core.h" />
     <ClInclude Include="GallantSignal.h" />
     <ClInclude Include="MIDIReceiver.h" />
     <ClInclude Include="resampler.h" />
-    <ClInclude Include="SpaceBass.h" />
+    <ClInclude Include="ds10.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ASIO_SDK\asio.cpp" />
-    <ClCompile Include="..\..\ASIO_SDK\asiodrivers.cpp" />
-    <ClCompile Include="..\..\ASIO_SDK\asiolist.cpp" />
-    <ClCompile Include="..\..\WDL\IPlug\IPlugStandalone.cpp" />
-    <ClCompile Include="..\..\WDL\rtaudiomidi\RtAudio.cpp" />
-    <ClCompile Include="..\..\WDL\rtaudiomidi\RtMidi.cpp" />
-    <ClCompile Include="app_wrapper\app_dialog.cpp" />
-    <ClCompile Include="app_wrapper\app_main.cpp" />
+    <ClCompile Include="..\..\WDL\IPlug\IPlugVST.cpp" />
     <ClCompile Include="arm_math.c" />
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10-core.c" />
     <ClCompile Include="mem_image.c" />
     <ClCompile Include="MIDIReceiver.cpp" />
     <ClCompile Include="resampler.c" />
-    <ClCompile Include="SpaceBass.cpp" />
+    <ClCompile Include="ds10.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SpaceBass.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="01ff8000x.bin" />
-    <None Include="memoryim.bin" />
+    <ResourceCompile Include="ds10.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,9 +12,9 @@
 
  App settings are stored in a .ini file. The location is as follows:
 
- Windows7: C:\Users\USERNAME\AppData\Local\SpaceBass\settings.ini
- Windows XP/Vista: C:\Documents and Settings\USERNAME\Local Settings\Application Data\SpaceBass\settings.ini
- OSX: /Users/USERNAME/Library/Application\ Support/SpaceBass/settings.ini
+ Windows7: C:\Users\USERNAME\AppData\Local\ds10\settings.ini
+ Windows XP/Vista: C:\Documents and Settings\USERNAME\Local Settings\Application Data\ds10\settings.ini
+ OSX: /Users/USERNAME/Library/Application\ Support/ds10/settings.ini
 
 */
 
@@ -44,7 +44,7 @@
 #include <string>
 #include <vector>
 
-#include "../SpaceBass.h" // change this to match your iplug plugin .h file
+#include "../ds10.h" // change this to match your iplug plugin .h file
 
 typedef unsigned short UInt16;
 

@@ -43,7 +43,7 @@
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SpaceBass.h" />
+    <ClInclude Include="ds10.h" />
     <ClInclude Include="..\..\WDL\IPlug\IPlugStandalone.h">
       <Filter>app</Filter>
     </ClInclude>
@@ -77,7 +77,7 @@
     <ClCompile Include="app_wrapper\app_main.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="SpaceBass.cpp" />
+    <ClCompile Include="ds10.cpp" />
     <ClCompile Include="..\..\WDL\IPlug\IPlugStandalone.cpp">
       <Filter>app</Filter>
     </ClCompile>
@@ -89,7 +89,7 @@
     <ClCompile Include="ds10-core.c" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SpaceBass.rc" />
+    <ResourceCompile Include="ds10.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="01ff8000x.bin" />

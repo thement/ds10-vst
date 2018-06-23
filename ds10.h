@@ -1,5 +1,5 @@
-#ifndef __SPACEBASS__
-#define __SPACEBASS__
+#ifndef __DS10__
+#define __DS10__
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-tokens"
@@ -12,11 +12,11 @@ extern "C" {
 #include "ds10-core.h"
 };
 
-class SpaceBass : public IPlug
+class ds10 : public IPlug
 {
 public:
-  SpaceBass(IPlugInstanceInfo instanceInfo);
-  ~SpaceBass();
+  ds10(IPlugInstanceInfo instanceInfo);
+  ~ds10();
 
   void SetSampleRate();
 

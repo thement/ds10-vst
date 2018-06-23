@@ -1,13 +1,13 @@
 //
 //  MIDIReceiver.h
-//  SpaceBass
+//  ds10
 //
 //  Created by Martin on 08.04.14.
 //
 //
 
-#ifndef __SpaceBass__MIDIReceiver__
-#define __SpaceBass__MIDIReceiver__
+#ifndef __ds10__MIDIReceiver__
+#define __ds10__MIDIReceiver__
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-tokens"
@@ -49,4 +49,4 @@ public:
     Signal2< int, int > noteOff;
 };
 
-#endif /* defined(__SpaceBass__MIDIReceiver__) */
+#endif /* defined(__ds10__MIDIReceiver__) */

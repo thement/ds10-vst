@@ -1,4 +1,4 @@
-LIBRARY		SpaceBass	
+LIBRARY		ds10	
 EXPORTS
 	NewPlugIn					@1
 	_PI_GetRoutineDescriptor	@2

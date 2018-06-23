@@ -1,13 +1,13 @@
 [Setup]
-AppName=SpaceBass
+AppName=ds10
 AppVersion=1.0.0
-DefaultDirName={pf}\SpaceBass
-DefaultGroupName=SpaceBass
+DefaultDirName={pf}\ds10
+DefaultGroupName=ds10
 Compression=lzma2
 SolidCompression=yes
 OutputDir=.\
 ArchitecturesInstallIn64BitMode=x64
-OutputBaseFilename=SpaceBass Installer
+OutputBaseFilename=ds10 Installer
 LicenseFile=license.rtf
 SetupLogging=yes
 
@@ -26,32 +26,32 @@ Name: "aax_32"; Description: "32-bit AAX Plugin (.aaxplugin)"; Types: full custo
 Name: "manual"; Description: "User guide"; Types: full custom; Flags: fixed
 
 [Files]
-Source: "..\build-win\app\Win32\bin\SpaceBass.exe"; DestDir: "{app}"; Check: not Is64BitInstallMode; Components:app; Flags: ignoreversion;
-Source: "..\build-win\app\x64\bin\SpaceBass.exe"; DestDir: "{app}"; Check: Is64BitInstallMode; Components:app; Flags: ignoreversion;
+Source: "..\build-win\app\Win32\bin\ds10.exe"; DestDir: "{app}"; Check: not Is64BitInstallMode; Components:app; Flags: ignoreversion;
+Source: "..\build-win\app\x64\bin\ds10.exe"; DestDir: "{app}"; Check: Is64BitInstallMode; Components:app; Flags: ignoreversion;
 
-Source: "..\build-win\vst2\Win32\bin\SpaceBass.dll"; DestDir: {code:GetVST2Dir_32}; Check: not Is64BitInstallMode; Components:vst2_32; Flags: ignoreversion;
-Source: "..\build-win\vst2\Win32\bin\SpaceBass.dll"; DestDir: {code:GetVST2Dir_32}; Check: Is64BitInstallMode; Components:vst2_32; Flags: ignoreversion;
-Source: "..\build-win\vst2\x64\bin\SpaceBass.dll"; DestDir: {code:GetVST2Dir_64}; Check: Is64BitInstallMode; Components:vst2_64; Flags: ignoreversion;
+Source: "..\build-win\vst2\Win32\bin\ds10.dll"; DestDir: {code:GetVST2Dir_32}; Check: not Is64BitInstallMode; Components:vst2_32; Flags: ignoreversion;
+Source: "..\build-win\vst2\Win32\bin\ds10.dll"; DestDir: {code:GetVST2Dir_32}; Check: Is64BitInstallMode; Components:vst2_32; Flags: ignoreversion;
+Source: "..\build-win\vst2\x64\bin\ds10.dll"; DestDir: {code:GetVST2Dir_64}; Check: Is64BitInstallMode; Components:vst2_64; Flags: ignoreversion;
 
-Source: "..\build-win\vst3\Win32\bin\SpaceBass.vst3"; DestDir: "{cf}\VST3\"; Check: not Is64BitInstallMode; Components:vst3_32; Flags: ignoreversion;
-Source: "..\build-win\vst3\Win32\bin\SpaceBass.vst3"; DestDir: "{cf32}\VST3\"; Check: Is64BitInstallMode; Components:vst3_32; Flags: ignoreversion;
-Source: "..\build-win\vst3\x64\bin\SpaceBass.vst3"; DestDir: "{cf64}\VST3\"; Check: Is64BitInstallMode; Components:vst3_64; Flags: ignoreversion;
+Source: "..\build-win\vst3\Win32\bin\ds10.vst3"; DestDir: "{cf}\VST3\"; Check: not Is64BitInstallMode; Components:vst3_32; Flags: ignoreversion;
+Source: "..\build-win\vst3\Win32\bin\ds10.vst3"; DestDir: "{cf32}\VST3\"; Check: Is64BitInstallMode; Components:vst3_32; Flags: ignoreversion;
+Source: "..\build-win\vst3\x64\bin\ds10.vst3"; DestDir: "{cf64}\VST3\"; Check: Is64BitInstallMode; Components:vst3_64; Flags: ignoreversion;
 
-Source: "..\build-win\rtas\bin\SpaceBass.dpm"; DestDir: "{cf32}\Digidesign\DAE\Plug-Ins\"; Components:rtas_32; Flags: ignoreversion;
-Source: "..\build-win\rtas\bin\SpaceBass.dpm.rsr"; DestDir: "{cf32}\Digidesign\DAE\Plug-Ins\"; Components:rtas_32; Flags: ignoreversion;
+Source: "..\build-win\rtas\bin\ds10.dpm"; DestDir: "{cf32}\Digidesign\DAE\Plug-Ins\"; Components:rtas_32; Flags: ignoreversion;
+Source: "..\build-win\rtas\bin\ds10.dpm.rsr"; DestDir: "{cf32}\Digidesign\DAE\Plug-Ins\"; Components:rtas_32; Flags: ignoreversion;
 
-Source: "..\build-win\aax\bin\SpaceBass.aaxplugin\*.*"; DestDir: "{cf32}\Avid\Audio\Plug-Ins\SpaceBass.aaxplugin\"; Components:aax_32; Flags: ignoreversion recursesubdirs;
+Source: "..\build-win\aax\bin\ds10.aaxplugin\*.*"; DestDir: "{cf32}\Avid\Audio\Plug-Ins\ds10.aaxplugin\"; Components:aax_32; Flags: ignoreversion recursesubdirs;
 
-Source: "..\manual\SpaceBass_manual.pdf"; DestDir: "{app}"
+Source: "..\manual\ds10_manual.pdf"; DestDir: "{app}"
 Source: "changelog.txt"; DestDir: "{app}"
 Source: "readmewin.rtf"; DestDir: "{app}"; DestName: "readme.rtf"; Flags: isreadme
 
 [Icons]
-Name: "{group}\SpaceBass"; Filename: "{app}\SpaceBass.exe"
-Name: "{group}\User guide"; Filename: "{app}\SpaceBass_manual.pdf"
+Name: "{group}\ds10"; Filename: "{app}\ds10.exe"
+Name: "{group}\User guide"; Filename: "{app}\ds10_manual.pdf"
 Name: "{group}\Changelog"; Filename: "{app}\changelog.txt"
 ;Name: "{group}\readme"; Filename: "{app}\readme.rtf"
-Name: "{group}\Uninstall SpaceBass"; Filename: "{app}\unins000.exe"
+Name: "{group}\Uninstall ds10"; Filename: "{app}\unins000.exe"
 
 ;[Dirs] 
 ;Name: {cf}\Digidesign\DAE\Plugins\
