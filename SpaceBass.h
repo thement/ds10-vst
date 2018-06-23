@@ -18,6 +18,8 @@ public:
   SpaceBass(IPlugInstanceInfo instanceInfo);
   ~SpaceBass();
 
+  void SetSampleRate();
+
   void Reset();
   void OnParamChange(int paramIdx);
   void ProcessDoubleReplacing(double** inputs, double** outputs, int nFrames);
@@ -38,6 +40,9 @@ private:
   double mFrequency;
   void CreatePresets();
   MIDIReceiver mMIDIReceiver;
+  int mOversample;
+  double mSampleRate;
+  double mExtraRatio;
   IControl* mVirtualKeyboard;
   void processVirtualKeyboard();
 

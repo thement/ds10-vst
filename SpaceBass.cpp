@@ -18,9 +18,11 @@ const int kNumPrograms = 5;
 
 enum EParams
 {
-	kNumParams = 26 + 7 - 1,
+	kNumParams = 26 + 7 - 1 + 2,
 	kMetaParams = 31,
 	mPolySwitch = 31,
+	mOversampleSwitch,
+	mDistractKnob,
 };
 
 typedef struct Property Property;
@@ -78,6 +80,8 @@ const Property parameterProperties[kNumParams] = {
 	{ PModsrc7, "modsrc3",	370, 628,	29, 0, 0, 6		},
 	{ PModsrc7, "modsrc4",	458, 628,	30, 0, 0, 6		},
 	{ PVoices4, "poly",		19, 712,	-1,	0, 0, 3		},
+	{ PSwitch2,	"oversample",368, 700,	-1, 0, 0, 1		},
+	{ PKnob,	"distract",	432, 696,	-1, 127, 0, 127	},
 };
 
 enum ELayout
@@ -95,6 +99,10 @@ SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kN
 
   print2_init();
   ds10state = ds10_init();
+  mOversample = 1;
+  mExtraRatio = 1;
+  mSampleRate = 44100;
+  
 
   CreateParams();
   CreateGraphics();
@@ -118,16 +126,14 @@ void SpaceBass::onNoteOff(int noteNumber, int velocity) {
 }
 
 void SpaceBass::CreateParams() {
-	char name[32];
 	for (int i = 0; i < kNumParams; i++) {
 		IParam *param = GetParam(i);
 		const Property *prop = &parameterProperties[i];
-		sprintf(name, "prop%d", i);
 
 		switch (prop->type) {
 		default:
 		case PKnob:
-			param->InitDouble(name, prop->def, prop->min, prop->max, 0.01);
+			param->InitDouble(prop->name, prop->def, prop->min, prop->max, 0.01);
 			break;
 		case PSwitch2:
 		case PSwitch3:
@@ -135,7 +141,7 @@ void SpaceBass::CreateParams() {
 		case PKnob5:
 		case PVoices4:
 		case PModsrc7:
-			param->InitEnum(name, prop->def - prop->min, prop->max - prop->min + 1);
+			param->InitEnum(prop->name, prop->def - prop->min, prop->max - prop->min + 1);
 			param->SetDisplayText(0, prop->name);
 			break;
 		}
@@ -206,14 +212,18 @@ void SpaceBass::ProcessDoubleReplacing(
   mMIDIReceiver.Flush(nFrames);
 }
 
+void SpaceBass::SetSampleRate(void)
+{
+	ds10_set_resampler(ds10state, mOversample, mSampleRate, mExtraRatio);
+}
+
 void SpaceBass::Reset()
 {
   TRACE;
   IMutexLock lock(this);
-  double sampleRate = GetSampleRate();
+  mSampleRate = GetSampleRate();
 
-
-  //voiceManager.setSampleRate(sampleRate);
+  SetSampleRate();
 }
 
 void SpaceBass::OnParamChange(int paramIdx)
@@ -223,7 +233,6 @@ void SpaceBass::OnParamChange(int paramIdx)
   IParam *param = GetParam(paramIdx);
   const Property *prop = &parameterProperties[paramIdx];
   int val = param->Value();
-  //printf("param %d: %lf\n", paramIdx, param->Value());
 
   if (paramIdx < kMetaParams) {
 	  /* mg.bpm has off in lower position */
@@ -233,6 +242,14 @@ void SpaceBass::OnParamChange(int paramIdx)
   } else switch (paramIdx) {
   case mPolySwitch:
 	  ds10_set_polyphony(ds10state, val + 1);
+	  break;
+  case mOversampleSwitch:
+	  mOversample = 0;
+	  SetSampleRate();
+	  break;
+  case mDistractKnob:
+	  mExtraRatio = pow(2, -(127 - param->Value()) / 127 * 4);
+	  SetSampleRate();
 	  break;
   }
 }

@@ -12,6 +12,7 @@ struct Filterx2 {
 
 typedef struct Resampler Resampler;
 struct Resampler {
+	int oversample;
 	Filterx2 f1, f2;
 	unsigned r, w;
 	double t, phase_inc;

@@ -75,6 +75,7 @@ void ds10_noteon(Ds10State *dss, int note, int velocity);
 void ds10_noteoff(Ds10State *dss, int note);
 void ds10_set_polyphony(Ds10State *dst, int polyphony);
 void ds10_exit(Ds10State *dst);
+void ds10_set_resampler(Ds10State *dss, int oversample, double sampling_rate, double extra_ratio);
 
 Ds10State *ds10_init(void);
 

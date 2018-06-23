@@ -48,13 +48,18 @@ static inline double getbuf(Resampler *r)
 void resamp_refill(Resampler *r, double *in, int len)
 {
 	assert(writable(r) >= len*4);
-	for (int i = 0; i < len; i++) {
-		double y0 = run_filter(&r->f1, in[i]);
-		putbuf(r, run_filter(&r->f2, y0));
-		putbuf(r, run_filter(&r->f2, 0));
-		double y1 = run_filter(&r->f1, 0);
-		putbuf(r, run_filter(&r->f2, y1));
-		putbuf(r, run_filter(&r->f2, 0));
+	if (r->oversample) {
+		for (int i = 0; i < len; i++) {
+			double y0 = run_filter(&r->f1, in[i]);
+			putbuf(r, run_filter(&r->f2, y0));
+			putbuf(r, run_filter(&r->f2, 0));
+			double y1 = run_filter(&r->f1, 0);
+			putbuf(r, run_filter(&r->f2, y1));
+			putbuf(r, run_filter(&r->f2, 0));
+		}
+	} else {
+		for (int i = 0; i < len; i++)
+			putbuf(r, in[i]);
 	}
 }
 
@@ -78,8 +83,12 @@ int resamp_get(Resampler *r, double *py)
 
 	double a = r->data[r->r];
 	double b = r->data[(r->r + 1) % RBUF_SIZE];
-	
-	*py = (a*(1 - r->t) + b*r->t)*4;
+	double y = a * (1 - r->t) + b * r->t;
+	/* oversampling gain compensation */
+	if (r->oversample)
+		y *= 4;
+	*py = y;
+
 	r->t += r->phase_inc;
 	return 1;
 }

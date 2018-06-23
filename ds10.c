@@ -252,12 +252,19 @@ ds10_exit(Ds10State *dss)
 	free(dss);
 }
 
+void
+ds10_set_resampler(Ds10State *dss, int oversample, double sampling_rate, double extra_ratio)
+{
+	dss->resampler.oversample = oversample;
+	dss->resampler.phase_inc = 32768.0 / sampling_rate * (oversample ? 4 : 1) * extra_ratio;
+}
+
 Ds10State *
 ds10_init(void)
 {
 	Ds10State *dss = calloc(1, sizeof(*dss));
 
-	dss->resampler.phase_inc = 32768.0 / 44100 * 4;
+	ds10_set_resampler(dss, 1, 44100, 1);
 
 	for (int i = 0; i < MaxVoices; i++) {
 		dss->mem_state[i].basemem = readseg("c:\\01ff8000x.bin");
