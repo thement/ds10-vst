@@ -80,7 +80,7 @@ const Property parameterProperties[kNumParams] = {
 	{ PModsrc7, "modsrc3",	370, 628,	29, 0, 0, 6		},
 	{ PModsrc7, "modsrc4",	458, 628,	30, 0, 0, 6		},
 	{ PVoices4, "poly",		19, 712,	-1,	0, 0, 3		},
-	{ PSwitch2,	"oversample",368, 700,	-1, 0, 0, 1		},
+	{ PSwitch2,	"oversample",368, 700,	-1, 1, 0, 1		},
 	{ PKnob,	"distract",	432, 696,	-1, 127, 0, 127	},
 };
 
@@ -244,11 +244,11 @@ void SpaceBass::OnParamChange(int paramIdx)
 	  ds10_set_polyphony(ds10state, val + 1);
 	  break;
   case mOversampleSwitch:
-	  mOversample = 0;
+	  mOversample = param->Int();
 	  SetSampleRate();
 	  break;
   case mDistractKnob:
-	  mExtraRatio = pow(2, -(127 - param->Value()) / 127 * 4);
+	  mExtraRatio = pow(2, -(127 - param->Value()) / 127 * 5);
 	  SetSampleRate();
 	  break;
   }
