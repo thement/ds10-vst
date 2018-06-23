@@ -306,6 +306,7 @@
     <ClCompile Include="ds10.c" />
     <ClCompile Include="EnvelopeGenerator.cpp" />
     <ClCompile Include="Filter.cpp" />
+    <ClCompile Include="mem_image.c" />
     <ClCompile Include="MIDIReceiver.cpp" />
     <ClCompile Include="Oscillator.cpp" />
     <ClCompile Include="PolyBLEPOscillator.cpp" />
@@ -319,6 +320,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="01ff8000x.bin" />
+    <None Include="memoryim.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

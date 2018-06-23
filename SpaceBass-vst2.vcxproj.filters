@@ -16,6 +16,7 @@
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10.c" />
     <ClCompile Include="resampler.c" />
+    <ClCompile Include="mem_image.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SpaceBass.h" />

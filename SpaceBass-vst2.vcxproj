@@ -258,6 +258,7 @@
     <ClCompile Include="ds10.c" />
     <ClCompile Include="EnvelopeGenerator.cpp" />
     <ClCompile Include="Filter.cpp" />
+    <ClCompile Include="mem_image.c" />
     <ClCompile Include="MIDIReceiver.cpp" />
     <ClCompile Include="Oscillator.cpp" />
     <ClCompile Include="PolyBLEPOscillator.cpp" />

@@ -98,11 +98,13 @@
     <ClCompile Include="c-driver.c" />
     <ClCompile Include="ds10.c" />
     <ClCompile Include="resampler.c" />
+    <ClCompile Include="mem_image.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpaceBass.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="01ff8000x.bin" />
+    <None Include="memoryim.bin" />
   </ItemGroup>
 </Project>

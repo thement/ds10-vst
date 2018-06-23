@@ -226,8 +226,8 @@ ds10_noteoff(Ds10State *dss, int note)
 	}
 }
 
-
 #define SEGSIZE (0x8000 + 0x400000)
+#if 0
 static void *
 readseg(const char *path)
 {
@@ -243,6 +243,17 @@ readseg(const char *path)
 	fclose(fp);
 	return mem;
 }
+#else
+extern unsigned char __01ff8000x_bin[];
+static void *
+readseg(const char *path)
+{
+	void *mem = calloc(1, SEGSIZE);
+	assert(mem);
+	memcpy(mem, __01ff8000x_bin, SEGSIZE);
+	return mem;
+}
+#endif
 
 void
 ds10_set_polyphony(Ds10State *dst, int polyphony)
@@ -292,8 +303,10 @@ static FILE *xlog = 0;
 
 void print2_init(void)
 {
+#if 0
 	if (!xlog)
 		xlog = fopen("C:\\Users\\Poly Cajt\\log.txt", "w");
+#endif
 }
 
 int printf2(const char *format, ...)
