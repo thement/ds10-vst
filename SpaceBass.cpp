@@ -16,40 +16,15 @@ extern "C" {
 }
 const int kNumPrograms = 5;
 
-const double parameterStep = 0.001;
-
 enum EParams
 {
 	kNumParams = 26 + 7 - 1,
-  // Oscillator Section:
-  mOsc1Waveform = 0,
-  mOsc1PitchMod,
-  mOsc2Waveform,
-  mOsc2PitchMod,
-  mOscMix,
-  // Filter Section:
-  mFilterMode,
-  mFilterCutoff,
-  mFilterResonance,
-  mFilterLfoAmount,
-  mFilterEnvAmount,
-  // LFO:
-  mLFOWaveform,
-  mLFOFrequency,
-  // Volume Envelope:
-  mVolumeEnvAttack,
-  mVolumeEnvDecay,
-  mVolumeEnvSustain,
-  mVolumeEnvRelease,
-  // Filter Envelope:
-  mFilterEnvAttack,
-  mFilterEnvDecay,
-  mFilterEnvSustain,
-  mFilterEnvRelease,
+	kMetaParams = 31,
+	mPolySwitch = 31,
 };
 
-typedef struct Params Params;
-struct Params {
+typedef struct Property Property;
+struct Property {
   const int type;
   const char *name;
   const int x;
@@ -70,7 +45,7 @@ enum {
 	PVoices4,
 	PNumTypes
 };
-const Params parameterProperties[kNumParams] = {
+const Property parameterProperties[kNumParams] = {
 	{ PKnob5,	"octave",	20, 58,		0,	0, -2, 2	},
 	{ PKnob,	"vco.int",	20, 222,	1,	0, -63, 63 },
 	{ PKnob,	"porta",	20, 140,	2,	0, 0, 127	},
@@ -117,7 +92,7 @@ enum ELayout
 
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
-  //printf("hello world, params=%p\n", CreateParams);
+
   ds10_init(4);
   CreateParams();
   CreateGraphics();
@@ -132,14 +107,14 @@ SpaceBass::~SpaceBass() {}
 void SpaceBass::CreateParams() {
 	char name[32];
 	for (int i = 0; i < kNumParams; i++) {
-		IParam *par = GetParam(i);
-		const Params *param = &parameterProperties[i];
-		sprintf(name, "param%d", i);
+		IParam *param = GetParam(i);
+		const Property *prop = &parameterProperties[i];
+		sprintf(name, "prop%d", i);
 
-		switch (param->type) {
+		switch (prop->type) {
 		default:
 		case PKnob:
-			par->InitDouble(name, param->def, param->min, param->max, 0.01);
+			param->InitDouble(name, prop->def, prop->min, prop->max, 0.01);
 			break;
 		case PSwitch2:
 		case PSwitch3:
@@ -147,8 +122,8 @@ void SpaceBass::CreateParams() {
 		case PKnob5:
 		case PVoices4:
 		case PModsrc7:
-			par->InitEnum(name, param->def, param->max - param->min + 1);
-			par->SetDisplayText(0, param->name);
+			param->InitEnum(name, prop->def, prop->max - prop->min + 1);
+			param->SetDisplayText(0, prop->name);
 			break;
 		}
 	}
@@ -176,7 +151,7 @@ void SpaceBass::CreateGraphics() {
 
 	for (int i = 0; i < kNumParams; i++) {
 		IControl* control;
-		const Params *param = &parameterProperties[i];
+		const Property *param = &parameterProperties[i];
 
 		switch (param->type) {
 		case PKnob:
@@ -230,82 +205,14 @@ void SpaceBass::OnParamChange(int paramIdx)
 {
 	
   IMutexLock lock(this);
-  IParam* param = GetParam(paramIdx);
-  printf("param %d: %lf\n", paramIdx, param->Value());
-  if(paramIdx == mLFOWaveform) {
-    voiceManager.setLFOMode(static_cast<Oscillator::OscillatorMode>(param->Int()));
-  } else if(paramIdx == mLFOFrequency) {
-    voiceManager.setLFOFrequency(param->Value());
-  } else {
-    using std::tr1::placeholders::_1;
-    using std::tr1::bind;
-    VoiceManager::VoiceChangerFunction changer;
-    switch(paramIdx) {
-      case mOsc1Waveform:
-        changer = bind(&VoiceManager::setOscillatorMode,
-                       _1,
-                       1,
-                       static_cast<Oscillator::OscillatorMode>(param->Int()));
-        break;
-      case mOsc1PitchMod:
-        changer = bind(&VoiceManager::setOscillatorPitchMod, _1, 1, param->Value());
-        break;
-      case mOsc2Waveform:
-        changer = bind(&VoiceManager::setOscillatorMode, _1, 2, static_cast<Oscillator::OscillatorMode>(param->Int()));
-        break;
-      case mOsc2PitchMod:
-        changer = bind(&VoiceManager::setOscillatorPitchMod, _1, 2, param->Value());
-        break;
-      case mOscMix:
-        changer = bind(&VoiceManager::setOscillatorMix, _1, param->Value());
-        break;
-        // Filter Section:
-      case mFilterMode:
-        changer = bind(&VoiceManager::setFilterMode, _1, static_cast<Filter::FilterMode>(param->Int()));
-        break;
-      case mFilterCutoff:
-		ds10_knob_all(11, param->Value() * 128);
-		return;
-        changer = bind(&VoiceManager::setFilterCutoff, _1, param->Value());
-        break;
-      case mFilterResonance:
-        changer = bind(&VoiceManager::setFilterResonance, _1, param->Value());
-        break;
-      case mFilterLfoAmount:
-        changer = bind(&VoiceManager::setFilterLFOAmount, _1, param->Value());
-        break;
-      case mFilterEnvAmount:
-        changer = bind(&VoiceManager::setFilterEnvAmount, _1, param->Value());
-        break;
-        // Volume Envelope:
-      case mVolumeEnvAttack:
-        changer = bind(&VoiceManager::setVolumeEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_ATTACK, param->Value());
-        break;
-      case mVolumeEnvDecay:
-        changer = bind(&VoiceManager::setVolumeEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_DECAY, param->Value());
-        break;
-      case mVolumeEnvSustain:
-        changer = bind(&VoiceManager::setVolumeEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_SUSTAIN, param->Value());
-        break;
-      case mVolumeEnvRelease:
-        changer = bind(&VoiceManager::setVolumeEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_RELEASE, param->Value());
-        break;
-        // Filter Envelope:
-      case mFilterEnvAttack:
-        changer = bind(&VoiceManager::setFilterEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_ATTACK, param->Value());
-        break;
-      case mFilterEnvDecay:
-        changer = bind(&VoiceManager::setFilterEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_DECAY, param->Value());
-        break;
-      case mFilterEnvSustain:
-        changer = bind(&VoiceManager::setFilterEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_SUSTAIN, param->Value());
-        break;
-      case mFilterEnvRelease:
-        changer = bind(&VoiceManager::setFilterEnvelopeStageValue, _1, EnvelopeGenerator::ENVELOPE_STAGE_RELEASE, param->Value());
-        break;
-	  default: return;
-    }
-    voiceManager.changeAllVoices(changer);
+  IParam *param = GetParam(paramIdx);
+  const Property *prop = &parameterProperties[paramIdx];
+
+  //printf("param %d: %lf\n", paramIdx, param->Value());
+  //param->Int(); param->Int();
+  if (paramIdx < kMetaParams) {
+	  ds10_knob_all(prop->ds_id, (int)param->Value());
+  } else switch (paramIdx) {
   }
 }
 
