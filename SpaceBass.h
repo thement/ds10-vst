@@ -33,7 +33,6 @@ public:
   int lastVirtualKeyboardNoteNumber;
   void onNoteOn(int noteNumber, int velocity);
   void onNoteOff(int noteNumber, int velocity);
-  
 private:
   Ds10State *ds10state;
   double mFrequency;
@@ -49,8 +48,6 @@ private:
   
   void CreateParams();
   void CreateGraphics();
-  
-  VoiceManager voiceManager;
 };
 
 #endif

@@ -211,7 +211,9 @@ void SpaceBass::Reset()
   TRACE;
   IMutexLock lock(this);
   double sampleRate = GetSampleRate();
-  voiceManager.setSampleRate(sampleRate);
+
+
+  //voiceManager.setSampleRate(sampleRate);
 }
 
 void SpaceBass::OnParamChange(int paramIdx)
