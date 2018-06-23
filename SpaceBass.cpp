@@ -55,8 +55,9 @@ struct Params {
   const int x;
   const int y;
   const int ds_id;
-  const int minVal;
-  const int maxVal;
+  const int def;
+  const int min;
+  const int max;
 };
 
 enum {
@@ -70,39 +71,39 @@ enum {
 	PNumTypes
 };
 const Params parameterProperties[kNumParams] = {
-	{ PKnob5,  "kn0x0", 20, 58, 1, 0, 127 },
-	{ PKnob4,  "kn1x0", 126, 58, 1, 0, 127 },
-	{ PKnob4,  "kn2x0", 220, 58, 1, 0, 127 },
-	{ PKnob,  "kn3x0", 324, 58, 1, 0, 127 },
-	{ PKnob,  "kn4x0", 426, 58, 1, 0, 127 },
-	{ PKnob,  "kn0x1", 20, 140, 1, 0, 127 },
-	{ PKnob,  "kn1x1", 126, 140, 1, 0, 127 },
-	{ PKnob,  "kn2x1", 220, 140, 1, 0, 127 },
-	{ PKnob,  "kn3x1", 324, 140, 1, 0, 127 },
-	{ PKnob,  "kn4x1", 426, 140, 1, 0, 127 },
-	{ PKnob,  "kn0x2", 20, 222, 1, 0, 127 },
-	{ PKnob,  "kn1x2", 126, 222, 1, 0, 127 },
-	{ PSwitch2,"kn2x2", 232, 218, 1, 0, 127 },
-	{ PKnob,  "kn3x2", 324, 222, 1, 0, 127 },
-	{ PKnob,  "kn4x2", 426, 222, 1, 0, 127 },
-	{ PKnob,  "kn0x3", 20, 304, 1, 0, 127 },
-	{ PKnob,  "kn1x3", 126, 304, 1, 0, 127 },
-	{ PSwitch2,  "kn2x3", 232, 306, 1, 0, 127 },
-	{ PSwitch3,  "kn3x3", 338, 306, 1, 0, 127 },
-	{ PKnob,  "kn4x3", 426, 304, 1, 0, 127 },
-	{ PKnob,  "kn0x5", 12, 537, 1, 0, 127 },
-	{ PKnob,  "kn1x5", 98, 537, 1, 0, 127 },
-	{ PKnob,  "kn2x5", 184, 537, 1, 0, 127 },
-	{ PKnob,  "kn3x5", 270, 537, 1, 0, 127 },
-	{ PKnob,  "kn4x5", 356, 537, 1, 0, 127 },
-	{ PKnob,  "kn5x5", 442, 537, 1, 0, 127 },
-	{ PSwitch2, "sw0x6", 20, 458, 1, 0, 1 },
-	{ PVoices4, "poly", 19, 712, 0, 0, 3 },
-	{ PModsrc7, "modsrc0", 112, 628, 1, 0, 6 },
-	{ PModsrc7, "modsrc1", 198, 628, 1, 0, 6 },
-	{ PModsrc7, "modsrc2", 284, 628, 1, 0, 6 },
-	{ PModsrc7, "modsrc3", 370, 628, 1, 0, 6 },
-	{ PModsrc7, "modsrc4", 458, 628, 1, 0, 6 },
+	{ PKnob5,  "kn0x0", 20, 58, 0, 0, -2, 2 },
+	{ PKnob4,  "kn1x0", 126, 58, 1, 0, 0, 127 },
+	{ PKnob4,  "kn2x0", 220, 58, 1, 0, 0, 127 },
+	{ PKnob,  "kn3x0", 324, 58, 1, 0, 0, 127 },
+	{ PKnob,  "kn4x0", 426, 58, 1, 0, 0, 127 },
+	{ PKnob,  "kn0x1", 20, 140, 1, 0, 0, 127 },
+	{ PKnob,  "kn1x1", 126, 140, 1, 0, 0, 127 },
+	{ PKnob,  "kn2x1", 220, 140, 1, 0, 0, 127 },
+	{ PKnob,  "kn3x1", 324, 140, 1, 0, 0, 127 },
+	{ PKnob,  "kn4x1", 426, 140, 1, 0, 0, 127 },
+	{ PKnob,  "kn0x2", 20, 222, 1, 0, 0, 127 },
+	{ PKnob,  "kn1x2", 126, 222, 1, 0, 0, 127 },
+	{ PSwitch2,"kn2x2", 232, 218, 1, 0, 0, 127 },
+	{ PKnob,  "kn3x2", 324, 222, 1, 0, 0, 127 },
+	{ PKnob,  "kn4x2", 426, 222, 1, 0, 0, 127 },
+	{ PKnob,  "kn0x3", 20, 304, 1, 0, 0, 127 },
+	{ PKnob,  "kn1x3", 126, 304, 1, 0, 0, 127 },
+	{ PSwitch2,  "kn2x3", 232, 306, 1, 0, 0, 127 },
+	{ PSwitch3,  "kn3x3", 338, 306, 1, 0, 0, 127 },
+	{ PKnob,  "kn4x3", 426, 304, 1, 0, 0, 127 },
+	{ PKnob,  "kn0x5", 12, 537, 1, 0, 0, 127 },
+	{ PKnob,  "kn1x5", 98, 537, 1, 0, 0, 127 },
+	{ PKnob,  "kn2x5", 184, 537, 1, 0, 0, 127 },
+	{ PKnob,  "kn3x5", 270, 537, 1, 0, 0, 127 },
+	{ PKnob,  "kn4x5", 356, 537, 1, 0, 0, 127 },
+	{ PKnob,  "kn5x5", 442, 537, 1, 0, 0, 127 },
+	{ PSwitch2, "sw0x6", 20, 458, 1, 0, 0, 1 },
+	{ PVoices4, "poly", 19, 712, 0, 0, 0, 3 },
+	{ PModsrc7, "modsrc0", 112, 628, 1, 0, 0, 6 },
+	{ PModsrc7, "modsrc1", 198, 628, 1, 0, 0, 6 },
+	{ PModsrc7, "modsrc2", 284, 628, 1, 0, 0, 6 },
+	{ PModsrc7, "modsrc3", 370, 628, 1, 0, 0, 6 },
+	{ PModsrc7, "modsrc4", 458, 628, 1, 0, 0, 6 },
 };
 
 enum ELayout
@@ -142,22 +143,12 @@ void SpaceBass::CreateParams() {
 			par->InitDouble(name, 64, 0, 127, 1);
 			break;
 		case PSwitch2:
-			par->InitEnum(name, 0, 2);
-			break;
 		case PSwitch3:
-			par->InitEnum(name, 0, 3);
-			break;
 		case PKnob4:
-			par->InitEnum(name, 0, 4);
-			break;
 		case PKnob5:
-			par->InitEnum(name, 0, 5);
-			break;
 		case PVoices4:
-			par->InitEnum(name, 1, 4);
-			break;
 		case PModsrc7:
-			par->InitEnum(name, 0, 6);
+			par->InitEnum(name, param->def, param->max - param->min + 1);
 			break;
 		}
 	}
