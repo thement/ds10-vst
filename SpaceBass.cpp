@@ -52,8 +52,8 @@ const Property parameterProperties[kNumParams] = {
 	{ PKnob,	"pitch.in",	98, 537,	3,	0, -63, 63	},
 	{ PKnob,	"pitch1.in",184, 537,	4,	0, -63, 63	},
 	{ PKnob,	"pitch2.in",270, 537,	5,	0, -63, 63	},
-	{ PKnob4,	"vco1",		126, 58,	6,	0, 0, 3		},
-	{ PKnob4,	"vco2",		220, 58,	7,	0, 0, 3		},
+	{ PKnob4,	"vco1",		126, 58,	6,	1, 0, 3		},
+	{ PKnob4,	"vco2",		220, 58,	7,	1, 0, 3		},
 	{ PKnob,	"vco2pitch",220, 140,	8,	0, -63, 63	},
 	{ PKnob,	"balance",	126, 140,	9,	0, 0, 127	},
 	{ PSwitch2,	"vco2sync",	232, 218,	10,	0, 0, 1		},
@@ -65,13 +65,13 @@ const Property parameterProperties[kNumParams] = {
 	{ PSwitch2,	"vca.eg",	232, 306,	16, 0, 0, 1		},
 	{ PKnob,	"vca.in",	442, 537,	17, 0, -63, 63	},
 	{ PKnob,	"drive",	126, 304,	18, 0, 0, 127	},
-	{ PKnob,	"level",	20, 304,	19, 0, 0, 100	},
+	{ PKnob,	"level",	20, 304,	19, 100, 0, 127	},
 	{ PKnob,	"attack",	426, 58,	20, 0, 0, 127	},
 	{ PKnob,	"decay",	426, 140,	21, 127, 0, 127	},
 	{ PKnob,	"sustain",	426, 222,	22, 127, 0, 127	},
 	{ PKnob,	"release",	426, 304,	23, 0, 0, 127	},
 	{ PKnob,	"mg.freq",	12, 537,	24, 0, 0, 127	},
-	{ PSwitch2, "mg.bpm",	20, 458,	25, 0, 0, 1		},
+	{ PSwitch2, "mg.bpm",	20, 458,	25, 1, 0, 1		},
 	{ PModsrc7, "modsrc0",	112, 628,	26, 0, 0, 6		},
 	{ PModsrc7, "modsrc1",	198, 628,	27, 0, 0, 6		},
 	{ PModsrc7, "modsrc2",	284, 628,	28, 0, 0, 6		},
@@ -122,7 +122,7 @@ void SpaceBass::CreateParams() {
 		case PKnob5:
 		case PVoices4:
 		case PModsrc7:
-			param->InitEnum(name, prop->def, prop->max - prop->min + 1);
+			param->InitEnum(name, prop->def - prop->min, prop->max - prop->min + 1);
 			param->SetDisplayText(0, prop->name);
 			break;
 		}
@@ -211,7 +211,11 @@ void SpaceBass::OnParamChange(int paramIdx)
   //printf("param %d: %lf\n", paramIdx, param->Value());
   //param->Int(); param->Int();
   if (paramIdx < kMetaParams) {
-	  ds10_knob_all(prop->ds_id, (int)param->Value());
+	  int val = param->Value();
+	  /* mg.bpm has off in lower position */
+	  if (prop->ds_id == 25)
+		  val = !val;
+	  ds10_knob_all(prop->ds_id, val);
   } else switch (paramIdx) {
   }
 }
