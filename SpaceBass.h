@@ -7,7 +7,7 @@
 #pragma clang diagnostic pop
 
 #include "MIDIReceiver.h"
-#include "VoiceManager.h"
+
 extern "C" {
 #include "ds10.h"
 };
