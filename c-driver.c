@@ -3,19 +3,12 @@
 #include <assert.h>
 #include "ds10.h"
 
-uint8_t *basemem;
-
-uint32_t tmp32;
-uint16_t tmp16;
-uint8_t tmp8;
-
-
-uint32_t *MEM32(uint32_t addr) { return vaddr(addr, 4, 0); }
-uint16_t *MEM16(uint32_t addr) { return vaddr(addr, 2, 0); }
-uint8_t *MEM8(uint32_t addr) { return vaddr(addr, 1, 0); }
+#define MEM32(a) ((uint32_t *)vaddr(ms, a, 4, 0))
+#define MEM16(a) ((uint16_t *)vaddr(ms, a, 2, 0))
+#define MEM8(a) ((uint8_t *)vaddr(ms, a, 1, 0))
 
 void
-execute1(uint32_t in_R15, uint32_t in_R14, uint32_t in_R13, uint32_t in_R0, uint32_t in_R1, uint32_t in_R2, uint32_t in_R3)
+execute1(MemState *ms, uint32_t in_R15, uint32_t in_R14, uint32_t in_R13, uint32_t in_R0, uint32_t in_R1, uint32_t in_R2, uint32_t in_R3)
 {
 	uint32_t R0 = 0, R1 = 0, R2 = 0, R3 = 0;
 	uint32_t R4 = 0, R5 = 0, R6 = 0, R7 = 0;
@@ -37,7 +30,6 @@ dispatch:
 #include "c-code.h"
 	default:
 		if (R15 == in_R14) {
-			//printf("done!\n");
 			return;
 		}
 		printf("unknown PC %08x!\n", R15); 

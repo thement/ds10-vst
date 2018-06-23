@@ -23,11 +23,11 @@ Voice* VoiceManager::findFreeVoice() {
 }
 
 void VoiceManager::onNoteOn(int noteNumber, int velocity) {
-	ds10_noteon(noteNumber, velocity);
+
 }
 
 void VoiceManager::onNoteOff(int noteNumber, int velocity) {
-	ds10_noteoff(noteNumber);
+
 }
 
 double VoiceManager::nextSample() {

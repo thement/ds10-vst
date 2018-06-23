@@ -8,6 +8,9 @@
 
 #include "MIDIReceiver.h"
 #include "VoiceManager.h"
+extern "C" {
+#include "ds10.h"
+};
 
 class SpaceBass : public IPlug
 {
@@ -28,8 +31,11 @@ public:
   inline bool GetKeyStatus(int key) const { return mMIDIReceiver.getKeyStatus(key); };
   static const int virtualKeyboardMinimumNoteNumber = 48;
   int lastVirtualKeyboardNoteNumber;
+  void onNoteOn(int noteNumber, int velocity);
+  void onNoteOff(int noteNumber, int velocity);
   
 private:
+  Ds10State *ds10state;
   double mFrequency;
   void CreatePresets();
   MIDIReceiver mMIDIReceiver;

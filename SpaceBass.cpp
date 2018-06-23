@@ -93,22 +93,29 @@ enum ELayout
 SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms, instanceInfo), lastVirtualKeyboardNoteNumber(virtualKeyboardMinimumNoteNumber - 1) {
   TRACE;
 
-  ds10_init();
-#if 0
-  ds10_noteon(55, 5);
-  ds10_noteon(56, 5);
-  ds10_noteoff(55);
-  ds10_noteoff(56);
-#endif
+  print2_init();
+  ds10state = ds10_init();
+
   CreateParams();
   CreateGraphics();
   CreatePresets();
   
-  mMIDIReceiver.noteOn.Connect(&voiceManager, &VoiceManager::onNoteOn);
-  mMIDIReceiver.noteOff.Connect(&voiceManager, &VoiceManager::onNoteOff);
+  mMIDIReceiver.noteOn.Connect(this, &SpaceBass::onNoteOn);
+  mMIDIReceiver.noteOff.Connect(this, &SpaceBass::onNoteOff);
 }
 
-SpaceBass::~SpaceBass() {}
+SpaceBass::~SpaceBass() {
+	ds10_exit(ds10state);
+}
+
+
+void SpaceBass::onNoteOn(int noteNumber, int velocity) {
+	ds10_noteon(ds10state, noteNumber, velocity);
+}
+
+void SpaceBass::onNoteOff(int noteNumber, int velocity) {
+	ds10_noteoff(ds10state, noteNumber);
+}
 
 void SpaceBass::CreateParams() {
 	char name[32];
@@ -193,7 +200,7 @@ void SpaceBass::ProcessDoubleReplacing(
 
   for (int i = 0; i < nFrames; ++i) {
     mMIDIReceiver.advance();
-    leftOutput[i] = rightOutput[i] = ds10_get_sample();
+    leftOutput[i] = rightOutput[i] = ds10_get_sample(ds10state);
   }
   
   mMIDIReceiver.Flush(nFrames);
@@ -220,10 +227,10 @@ void SpaceBass::OnParamChange(int paramIdx)
 	  /* mg.bpm has off in lower position */
 	  if (prop->ds_id == 25)
 		  val = !val;
-	  ds10_knob_all(prop->ds_id, val);
+	  ds10_knob_all(ds10state, prop->ds_id, val);
   } else switch (paramIdx) {
   case mPolySwitch:
-	  ds10_set_polyphony(val + 1);
+	  ds10_set_polyphony(ds10state, val + 1);
 	  break;
   }
 }

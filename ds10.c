@@ -8,30 +8,19 @@
 #include "ds10.h"
 
 
-int fulltrace = 0;
-void (*execute_fn)(uint32_t pc, uint32_t lr, uint32_t sp, uint32_t r0, uint32_t r1, uint32_t r2, uint32_t r3);
-
-void
-writel(uint32_t addr, uint32_t val)
+static void
+writel(MemState *ms, uint32_t addr, uint32_t val)
 {
-	*(uint32_t *)vaddr(addr, 4, 0) = val;
+	*(uint32_t *)vaddr(ms, addr, 4, 0) = val;
 }
 
-uint32_t
-readl(uint32_t addr)
+static uint32_t
+readl(MemState *ms, uint32_t addr)
 {
-	return *(uint32_t *)vaddr(addr, 4, 0);
+	return *(uint32_t *)vaddr(ms, addr, 4, 0);
 }
 
-typedef struct DsDevice DsDevice;
-
-struct DsDevice {
-	uint32_t addr, buf_addr;
-	uint32_t queue_off;
-	uint32_t playback_fn, knob_fn;
-};
-
-static DsDevice devices[DS10_N_DEVICES] = {
+static const DsDevice devices[DS10_N_DEVICES] = {
 	{ 0x022489A0, 0x01FF8820, 0x80, 0x02074720, 0x02075648 },
 	{ 0x02248FE0, 0x01FF88A0, 0x80, 0x02074720, 0x02075648 },
 	{ 0x02249620, 0x01FF8920, 0x80, 0x020722b8, 0 },
@@ -41,97 +30,71 @@ static DsDevice devices[DS10_N_DEVICES] = {
 	{ 0x0224A1A0, 0x02248680, 0xC0, 0x02072e8c, 0 },
 };
 
-
-#define INIT_SP 0x01FFA000
-#define INIT_LR 0xe0000000
-
-#define MAX_VOICES 4
-
-static uint8_t *ds10_mem[MAX_VOICES];
-static double sample_buf[DS10_BUF_NSAMP];
-static int in_buf = 0, in_ptr = 0;
-static int ds10_polyphony = 0;
-
 double
-ds10_get_sample(void)
+ds10_get_sample(Ds10State *dss)
 {
-	DsDevice *dev = &devices[0];
+	const DsDevice *dev = &devices[0];
 
-	if (in_ptr >= in_buf) {
-		memset(sample_buf, 0, sizeof(sample_buf));
-		for (int v = 0; v < ds10_polyphony; v++) {
-			basemem = ds10_mem[v];
-			execute_fn(dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
-			int16_t *buf = vaddr(dev->buf_addr, DS10_BUF_NSAMP * 2, 0);
+	if (dss->in_ptr >= dss->in_buf) {
+		memset(dss->sample_buf, 0, sizeof(dss->sample_buf));
+		for (int v = 0; v < dss->ds10_polyphony; v++) {
+			execute1(&dss->mem_state[v], dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
+			int16_t *buf = vaddr(&dss->mem_state[v], dev->buf_addr, DS10_BUF_NSAMP * 2, 0);
 			for (int i = 0; i < DS10_BUF_NSAMP; i++)
-				sample_buf[i] += buf[i] / 32768.0;
+				dss->sample_buf[i] += buf[i] / 32768.0;
 		}
-		in_ptr = 0;
-		in_buf = DS10_BUF_NSAMP;
+		dss->in_ptr = 0;
+		dss->in_buf = DS10_BUF_NSAMP;
 	}
-	return sample_buf[in_ptr++];
+	return dss->sample_buf[dss->in_ptr++];
 }
 
 
 void
-ds10_knob(int voice, unsigned id, unsigned val)
+ds10_knob(Ds10State *dss, int voice, unsigned id, unsigned val)
 {
-	DsDevice *dev = &devices[0];
+	const DsDevice *dev = &devices[0];
 
-	if (voice >= MAX_VOICES)
+	if (voice >= MaxVoices)
 		return;
 
-	basemem = ds10_mem[voice];
 	if (dev->knob_fn != 0) {
-		execute_fn(dev->knob_fn, INIT_LR, INIT_SP, dev->addr, id, val, 0);
+		execute1(&dss->mem_state[voice], dev->knob_fn, INIT_LR, INIT_SP, dev->addr, id, val, 0);
 	}
 }
 
 void
-ds10_knob_all(unsigned id, unsigned val)
+ds10_knob_all(Ds10State *dss, unsigned id, unsigned val)
 {
 	/* change knob for all voices, in case they became active later */
-	for (int i = 0; i < MAX_VOICES; i++)
-		ds10_knob(i, id, val);
+	for (int i = 0; i < MaxVoices; i++)
+		ds10_knob(dss, i, id, val);
 }
 
 static void
-ds10_noteon_voice(int voice, int key, int vel)
+ds10_noteon_voice(Ds10State *dss, int voice, int key, int vel)
 {
-	DsDevice *dev = &devices[0];
-	if (voice >= MAX_VOICES)
+	const DsDevice *dev = &devices[0];
+	if (voice >= MaxVoices)
 		return;
-	basemem = ds10_mem[voice];
-	writel(dev->addr + dev->queue_off, 2);
-	writel(dev->addr + dev->queue_off + 4, key);
-	writel(dev->addr + 8, 1);
+
+	writel(&dss->mem_state[voice], dev->addr + dev->queue_off, 2);
+	writel(&dss->mem_state[voice], dev->addr + dev->queue_off + 4, key);
+	writel(&dss->mem_state[voice], dev->addr + 8, 1);
 }
 
 static void
-ds10_noteoff_voice(int voice)
+ds10_noteoff_voice(Ds10State *dss, int voice)
 {
-	DsDevice *dev = &devices[0];
-	if (voice >= MAX_VOICES)
+	const DsDevice *dev = &devices[0];
+	if (voice >= MaxVoices)
 		return;
-	basemem = ds10_mem[voice];
-	writel(dev->addr + dev->queue_off, 1);
-	writel(dev->addr + dev->queue_off + 4, 0);
-	writel(dev->addr + 8, 1);
+
+	writel(&dss->mem_state[voice], dev->addr + dev->queue_off, 1);
+	writel(&dss->mem_state[voice], dev->addr + dev->queue_off + 4, 0);
+	writel(&dss->mem_state[voice], dev->addr + 8, 1);
 }
 
-enum {
-	MaxPressed = 16,
-	MaxVoices = MAX_VOICES,
-};
-typedef struct Pressed Pressed;
-struct Pressed {
-	int note, velocity;
-	int has_voice, voice_id;
-};
-
-static Pressed pressed[MaxPressed];
-static int used_voices[MaxVoices];
-int last_used = 0, n_pressed = 0, n_playing = 0;
 
 // if there's a free voice, use that voice
 // otherwise: steal voice that's playing the longest
@@ -139,14 +102,14 @@ int last_used = 0, n_pressed = 0, n_playing = 0;
 // stop playing note and release the voice
 // if there's a key that has no associated voice, then play that key
 
-static int get_free_voice(int *pv)
+static int get_free_voice(Ds10State *dss, int *pv)
 {
-	int v = last_used;
-	for (int i = 0; i < ds10_polyphony; i++) {
-		v = (v + 1) % ds10_polyphony;
-		if (used_voices[v] == 0) {
-			used_voices[v] = 1;
-			last_used = v;
+	int v = dss->last_used;
+	for (int i = 0; i < dss->ds10_polyphony; i++) {
+		v = (v + 1) % dss->ds10_polyphony;
+		if (dss->used_voices[v] == 0) {
+			dss->used_voices[v] = 1;
+			dss->last_used = v;
 			*pv = v;
 			return 1;
 		}
@@ -154,88 +117,88 @@ static int get_free_voice(int *pv)
 	return 0;
 }
 
-static void return_unused_voice(int v)
+static void return_unused_voice(Ds10State *dss, int v)
 {
-	assert(used_voices[v]);
-	used_voices[v] = 0;
+	assert(dss->used_voices[v]);
+	dss->used_voices[v] = 0;
 }
 
-static void pr_assign_voice(Pressed *pr, int v)
+static void pr_assign_voice(Ds10State *dss, Pressed *pr, int v)
 {
 	pr->voice_id = v;
-	ds10_noteon_voice(pr->voice_id, pr->note, pr->velocity);
+	ds10_noteon_voice(dss, pr->voice_id, pr->note, pr->velocity);
 	pr->has_voice = 1;
 }
 
-static void pr_steal_voice(Pressed *pr, int *pv)
+static void pr_steal_voice(Ds10State *dss, Pressed *pr, int *pv)
 {
 	assert(pr->has_voice);
-	ds10_noteoff_voice(pr->voice_id);
+	ds10_noteoff_voice(dss, pr->voice_id);
 	*pv = pr->voice_id;
 	pr->voice_id = -1;
 	pr->has_voice = 0;
 }
 
 void
-ds10_noteon(int note, int velocity)
+ds10_noteon(Ds10State *dss, int note, int velocity)
 {
 	int v = -1;
 	/* ignore noteons if we reached a limit */
-	if (n_pressed >= MaxPressed)
+	if (dss->n_pressed >= MaxPressed)
 		return;
 	/* try to get a free voice */
-	if (!get_free_voice(&v)) {
+	if (!get_free_voice(dss, &v)) {
 		/* steal voice that's been playing the longest */
-		for (int i = 0; i < n_pressed; i++) {
-			Pressed *pr = &pressed[i];
+		for (int i = 0; i < dss->n_pressed; i++) {
+			Pressed *pr = &dss->pressed[i];
 			if (pr->has_voice) {
-				pr_steal_voice(pr, &v);
+				pr_steal_voice(dss, pr, &v);
 				break;
 			}
 		}
 		assert(v != -1);
 	}
 	/* track this key as pressed */
-	Pressed *pr = &pressed[n_pressed++];
+	Pressed *pr = &dss->pressed[dss->n_pressed++];
 	pr->note = note;
 	pr->velocity = velocity;
-	pr_assign_voice(pr, v);
+	pr_assign_voice(dss, pr, v);
 }
 
 void
-ds10_noteoff(int note)
+ds10_noteoff(Ds10State *dss, int note)
 {
 	int recyclable_voices = 0;
 	/* find a voice holding this key */
-	for (int i = n_pressed - 1; i >= 0; i--) {
-		Pressed *pr = &pressed[i];
+	for (int i = dss->n_pressed - 1; i >= 0; i--) {
+		Pressed *pr = &dss->pressed[i];
 		if (pr->note == note) {
 			/* if this pressed key is playing on a voice, stop it */
 			if (pr->has_voice) {
 				int v;
-				pr_steal_voice(pr, &v);
-				return_unused_voice(v);
+				pr_steal_voice(dss, pr, &v);
+				return_unused_voice(dss, v);
 				recyclable_voices++;
 			}
 			/* remove pressed key from table */
-			memcpy(&pressed[i], &pressed[i + 1], sizeof(Pressed)*(n_pressed - i - 1));
-			n_pressed--;
+			memcpy(&dss->pressed[i], &dss->pressed[i + 1], sizeof(Pressed)*(dss->n_pressed - i - 1));
+			dss->n_pressed--;
 		}
 	}
 	/* allocate remaining voices to pressed keys that are not playing */
-	for (int i = n_pressed - 1; recyclable_voices > 0 && i >= 0; i--) {
-		Pressed *pr = &pressed[i];
+	for (int i = dss->n_pressed - 1; recyclable_voices > 0 && i >= 0; i--) {
+		Pressed *pr = &dss->pressed[i];
 		if (!pr->has_voice) {
 			int v;
-			if (!get_free_voice(&v))
+			if (!get_free_voice(dss, &v))
 				assert(0);
-			pr_assign_voice(pr, v);
+			pr_assign_voice(dss, pr, v);
 			recyclable_voices--;
 		}
 	}
 }
 
-extern uint8_t *basemem;
+
 #define SEGSIZE (0x8000 + 0x400000)
 static void *
 readseg(const char *path)
@@ -252,42 +215,49 @@ readseg(const char *path)
 	fclose(fp);
 	return mem;
 }
-FILE *xlog;
+
 void
-ds10_set_polyphony(int polyphony)
+ds10_set_polyphony(Ds10State *dst, int polyphony)
 {
-	if (polyphony >= MAX_VOICES)
-		polyphony = MAX_VOICES;
+	if (polyphony >= MaxVoices)
+		polyphony = MaxVoices;
 	if (polyphony < 1)
 		polyphony = 1;
-	ds10_polyphony = polyphony;
+	dst->ds10_polyphony = polyphony;
 
-	printf("polyphont set to %d\n", ds10_polyphony);
+	printf("polyphony set to %d\n", dst->ds10_polyphony);
 }
 
 void
+ds10_exit(Ds10State *dss)
+{
+	for (int i = 0; i < MaxVoices; i++)
+		free(dss->mem_state[i].basemem);
+	free(dss);
+}
+
+Ds10State *
 ds10_init(void)
 {
-	xlog = fopen("C:\\Users\\Poly Cajt\\log.txt", "w");
-#if 0
-	readseg("02000000.bin");
-	readseg("01ff8000.bin");
-	/* this is our "stack" and scratchpad */
-	newseg(0xf0000000, 0x00400000, seg_count++);
-#else
-	for (int i = 0; i < MAX_VOICES; i++)
-		ds10_mem[i] = readseg("c:\\01ff8000x.bin");
-	ds10_polyphony = 1;
-#endif
-	execute_fn = execute1;
+	Ds10State *dss = calloc(1, sizeof(*dss));
+
+	for (int i = 0; i < MaxVoices; i++) {
+		dss->mem_state[i].basemem = readseg("c:\\01ff8000x.bin");
+	}
+	dss->ds10_polyphony = 1;
+
+	return dss;
 }
 
-void
-ds10_exit(void)
-{
-}
 
 /* utils */
+static FILE *xlog = 0;
+
+void print2_init(void)
+{
+	if (!xlog)
+		xlog = fopen("C:\\Users\\Poly Cajt\\log.txt", "w");
+}
 
 int printf2(const char *format, ...)
 {
