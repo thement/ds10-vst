@@ -95,11 +95,11 @@ ds10_knob_all(unsigned id, unsigned val)
 		ds10_knob(i, id, val);
 }
 
-void
-ds10_noteon(int voice, int key, int vel)
+static void
+ds10_noteon_voice(int voice, int key, int vel)
 {
 	DsDevice *dev = &devices[0];
-	if (voice >= ds10_polyphony)
+	if (voice >= MAX_VOICES)
 		return;
 	basemem = ds10_mem[voice];
 	writel(dev->addr + dev->queue_off, 2);
@@ -107,16 +107,132 @@ ds10_noteon(int voice, int key, int vel)
 	writel(dev->addr + 8, 1);
 }
 
-void
-ds10_noteoff(int voice)
+static void
+ds10_noteoff_voice(int voice)
 {
 	DsDevice *dev = &devices[0];
-	if (voice >= ds10_polyphony)
+	if (voice >= MAX_VOICES)
 		return;
 	basemem = ds10_mem[voice];
 	writel(dev->addr + dev->queue_off, 1);
 	writel(dev->addr + dev->queue_off + 4, 0);
 	writel(dev->addr + 8, 1);
+}
+
+enum {
+	MaxPressed = 16,
+	MaxVoices = MAX_VOICES,
+};
+typedef struct Pressed Pressed;
+struct Pressed {
+	int note, velocity;
+	int has_voice, voice_id;
+};
+
+static Pressed pressed[MaxPressed];
+static int used_voices[MaxVoices];
+int last_used = 0, n_pressed = 0, n_playing = 0;
+
+// if there's a free voice, use that voice
+// otherwise: steal voice that's playing the longest
+
+// stop playing note and release the voice
+// if there's a key that has no associated voice, then play that key
+
+static int get_free_voice(int *pv)
+{
+	int v = last_used;
+	for (int i = 0; i < ds10_polyphony; i++) {
+		v = (v + 1) % ds10_polyphony;
+		if (used_voices[v] == 0) {
+			used_voices[v] = 1;
+			last_used = v;
+			*pv = v;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+static void return_unused_voice(int v)
+{
+	assert(used_voices[v]);
+	used_voices[v] = 0;
+}
+
+static void pr_assign_voice(Pressed *pr, int v)
+{
+	pr->voice_id = v;
+	ds10_noteon_voice(pr->voice_id, pr->note, pr->velocity);
+	pr->has_voice = 1;
+}
+
+static void pr_steal_voice(Pressed *pr, int *pv)
+{
+	assert(pr->has_voice);
+	ds10_noteoff_voice(pr->voice_id);
+	*pv = pr->voice_id;
+	pr->voice_id = -1;
+	pr->has_voice = 0;
+}
+
+void
+ds10_noteon(int note, int velocity)
+{
+	int v = -1;
+	/* ignore noteons if we reached a limit */
+	if (n_pressed >= MaxPressed)
+		return;
+	/* try to get a free voice */
+	if (!get_free_voice(&v)) {
+		/* steal voice that's been playing the longest */
+		for (int i = 0; i < n_pressed; i++) {
+			Pressed *pr = &pressed[i];
+			if (pr->has_voice) {
+				pr_steal_voice(pr, &v);
+				break;
+			}
+		}
+		assert(v != -1);
+	}
+	/* track this key as pressed */
+	Pressed *pr = &pressed[n_pressed++];
+	pr->note = note;
+	pr->velocity = velocity;
+	pr_assign_voice(pr, v);
+}
+
+void
+ds10_noteoff(int note)
+{
+	int recyclable_voices = 0;
+	/* find a voice holding this key */
+	for (int i = n_pressed - 1; i >= 0; i--) {
+		Pressed *pr = &pressed[i];
+		if (pr->note == note) {
+			/* if this pressed key is playing on a voice, stop it */
+			if (pr->has_voice) {
+				int v;
+				pr_steal_voice(pr, &v);
+				return_unused_voice(v);
+				recyclable_voices++;
+			}
+			/* remove pressed key from table */
+			memcpy(&pressed[i], &pressed[i + 1], sizeof(Pressed)*(n_pressed - i - 1));
+			n_pressed--;
+		}
+	}
+	/* allocate remaining voices to pressed keys that are not playing */
+	for (int i = n_pressed - 1; recyclable_voices > 0 && i >= 0; i--) {
+		Pressed *pr = &pressed[i];
+		if (!pr->has_voice) {
+			int v;
+			if (!get_free_voice(&v))
+				assert(0);
+			pr_assign_voice(pr, v);
+			recyclable_voices--;
+		}
+	}
 }
 
 extern uint8_t *basemem;

@@ -23,32 +23,11 @@ Voice* VoiceManager::findFreeVoice() {
 }
 
 void VoiceManager::onNoteOn(int noteNumber, int velocity) {
-    Voice* voice = findFreeVoice();
-	printf("noteon: %d, voice=%p\n", noteNumber, voice);
-    if (!voice) {
-        return;
-    }
-	ds10_noteon(voice - voices, noteNumber, velocity);
-    voice->reset();
-    voice->setNoteNumber(noteNumber);
-    voice->mVelocity = velocity;
-    voice->isActive = true;
-    voice->mVolumeEnvelope.enterStage(EnvelopeGenerator::ENVELOPE_STAGE_ATTACK);
-    voice->mFilterEnvelope.enterStage(EnvelopeGenerator::ENVELOPE_STAGE_ATTACK);
+	ds10_noteon(noteNumber, velocity);
 }
 
 void VoiceManager::onNoteOff(int noteNumber, int velocity) {
-	printf("noteoff: %d\n", noteNumber);
-    // Find the voice(s) with the given noteNumber:
-    for (int i = 0; i < NumberOfVoices; i++) {
-        Voice& voice = voices[i];
-        if (voice.isActive && voice.mNoteNumber == noteNumber) {
-			ds10_noteoff(i);
-			voice.isActive = false;
-            voice.mVolumeEnvelope.enterStage(EnvelopeGenerator::ENVELOPE_STAGE_RELEASE);
-            voice.mFilterEnvelope.enterStage(EnvelopeGenerator::ENVELOPE_STAGE_RELEASE);
-        }
-    }
+	ds10_noteoff(noteNumber);
 }
 
 double VoiceManager::nextSample() {
@@ -65,7 +44,6 @@ double VoiceManager::nextSample() {
 VoiceManager::VoiceManager()
 {
 	for (int i = 0; i < NumberOfVoices; i++) {
-		printf("initializing voice %d\n", i);
 		voices[i].setVoiceNo(i);
 	}
 }

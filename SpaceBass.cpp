@@ -94,6 +94,12 @@ SpaceBass::SpaceBass(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kN
   TRACE;
 
   ds10_init();
+#if 0
+  ds10_noteon(55, 5);
+  ds10_noteon(56, 5);
+  ds10_noteoff(55);
+  ds10_noteoff(56);
+#endif
   CreateParams();
   CreateGraphics();
   CreatePresets();
