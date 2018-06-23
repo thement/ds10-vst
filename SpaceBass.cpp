@@ -20,7 +20,7 @@ const double parameterStep = 0.001;
 
 enum EParams
 {
-	kNumParams = 26,
+	kNumParams = 26 + 7,
   // Oscillator Section:
   mOsc1Waveform = 0,
   mOsc1PitchMod,
@@ -65,8 +65,8 @@ enum {
 	PKnob5,
 	PSwitch2,
 	PSwitch3,
-	PSrc7,
-	PPoly4,
+	PModsrc7,
+	PVoices4,
 	PNumTypes
 };
 const Params parameterProperties[kNumParams] = {
@@ -96,6 +96,13 @@ const Params parameterProperties[kNumParams] = {
 	{ PKnob,  "kn3x5", 270, 537, 1, 0, 127 },
 	{ PKnob,  "kn4x5", 356, 537, 1, 0, 127 },
 	{ PKnob,  "kn5x5", 442, 537, 1, 0, 127 },
+	{ PSwitch2, "sw0x6", 20, 458, 1, 0, 1 },
+	{ PVoices4, "poly", 19, 712, 0, 0, 3 },
+	{ PModsrc7, "modsrc0", 112, 628, 1, 0, 6 },
+	{ PModsrc7, "modsrc1", 198, 628, 1, 0, 6 },
+	{ PModsrc7, "modsrc2", 284, 628, 1, 0, 6 },
+	{ PModsrc7, "modsrc3", 370, 628, 1, 0, 6 },
+	{ PModsrc7, "modsrc4", 458, 628, 1, 0, 6 },
 };
 
 enum ELayout
@@ -146,6 +153,12 @@ void SpaceBass::CreateParams() {
 		case PKnob5:
 			par->InitEnum(name, 0, 5);
 			break;
+		case PVoices4:
+			par->InitEnum(name, 1, 4);
+			break;
+		case PModsrc7:
+			par->InitEnum(name, 0, 6);
+			break;
 		}
 	}
 }
@@ -164,6 +177,8 @@ void SpaceBass::CreateGraphics() {
 	bitmaps[PKnob5] = pGraphics->LoadIBitmap(KNOB5_ID, KNOB5_FN, 5);
 	bitmaps[PSwitch2] = pGraphics->LoadIBitmap(SWITCH2_ID, SWITCH2_FN, 2);
 	bitmaps[PSwitch3] = pGraphics->LoadIBitmap(SWITCH3_ID, SWITCH3_FN, 3);
+	bitmaps[PVoices4] = pGraphics->LoadIBitmap(VOICES4_ID, VOICES4_FN, 4);
+	bitmaps[PModsrc7] = pGraphics->LoadIBitmap(MODSRC7_ID, MODSRC7_FN, 7);
 
 	for (int i = 0; i < kNumParams; i++) {
 		IControl* control;
@@ -178,6 +193,8 @@ void SpaceBass::CreateGraphics() {
 			break;
 		case PSwitch2:
 		case PSwitch3:
+		case PModsrc7:
+		case PVoices4:
 			control = new ISwitchControl(this, param->x, param->y, i, &bitmaps[param->type]);
 			break;
 		}

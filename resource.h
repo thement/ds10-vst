@@ -68,6 +68,8 @@ instrument determined by PLUG _IS _INST
 #define KNOB5_ID		106
 #define SWITCH2_ID		107
 #define SWITCH3_ID		108
+#define VOICES4_ID		109
+#define MODSRC7_ID		110
 
 // Image resource locations for this plug.
 #define BG_FN         "resources/img/panel3.png"
@@ -79,6 +81,8 @@ instrument determined by PLUG _IS _INST
 #define KNOB5_FN      "resources/img/testknob3-5.png"
 #define SWITCH2_FN    "resources/img/sw-2.png"
 #define SWITCH3_FN    "resources/img/sw-3.png"
+#define VOICES4_FN    "resources/img/voicesm-4.png"
+#define MODSRC7_FN    "resources/img/modsrc-7.png"
 
 // GUI default dimensions
 #define GUI_WIDTH 512
