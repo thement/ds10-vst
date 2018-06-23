@@ -51,6 +51,7 @@ struct Ds10State {
 
 	Pressed pressed[MaxPressed];
 	int used_voices[MaxVoices];
+	double volume[MaxVoices];
 	int last_used, n_pressed;
 
 	Resampler resampler;

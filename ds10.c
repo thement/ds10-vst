@@ -37,10 +37,11 @@ ds10_render_samplebuf(Ds10State *dss)
 
 	memset(dss->sample_buf, 0, sizeof(dss->sample_buf));
 	for (int v = 0; v < dss->ds10_polyphony; v++) {
+		double vol = dss->volume[v];
 		execute1(&dss->mem_state[v], dev->playback_fn, INIT_LR, INIT_SP, dev->addr, 0, 0, 0);
 		int16_t *buf = vaddr(&dss->mem_state[v], dev->buf_addr, DS10_BUF_NSAMP * 2, 0);
 		for (int i = 0; i < DS10_BUF_NSAMP; i++)
-			dss->sample_buf[i] += buf[i] / 32768.0;
+			dss->sample_buf[i] += buf[i] / 32768.0 * vol;
 	}
 }
 
@@ -87,6 +88,12 @@ ds10_knob_all(Ds10State *dss, unsigned id, unsigned val)
 		ds10_knob(dss, i, id, val);
 }
 
+static double
+midi_to_gain(int midi)
+{
+	double v = (double)midi / 0x7f;
+	return v * v;
+}
 static void
 ds10_noteon_voice(Ds10State *dss, int voice, int key, int vel)
 {
@@ -94,21 +101,26 @@ ds10_noteon_voice(Ds10State *dss, int voice, int key, int vel)
 	if (voice >= MaxVoices)
 		return;
 
-	writel(&dss->mem_state[voice], dev->addr + dev->queue_off, 2);
-	writel(&dss->mem_state[voice], dev->addr + dev->queue_off + 4, key);
-	writel(&dss->mem_state[voice], dev->addr + 8, 1);
+	MemState *ms = &dss->mem_state[voice];
+	dss->volume[voice] = midi_to_gain(vel);
+
+	writel(ms, dev->addr + dev->queue_off, 2);
+	writel(ms, dev->addr + dev->queue_off + 4, key);
+	writel(ms, dev->addr + 8, 1);
 }
 
 static void
 ds10_noteoff_voice(Ds10State *dss, int voice)
 {
 	const DsDevice *dev = &devices[0];
+
 	if (voice >= MaxVoices)
 		return;
 
-	writel(&dss->mem_state[voice], dev->addr + dev->queue_off, 1);
-	writel(&dss->mem_state[voice], dev->addr + dev->queue_off + 4, 0);
-	writel(&dss->mem_state[voice], dev->addr + 8, 1);
+	MemState *ms = &dss->mem_state[voice];
+	writel(ms, dev->addr + dev->queue_off, 1);
+	writel(ms, dev->addr + dev->queue_off + 4, 0);
+	writel(ms, dev->addr + 8, 1);
 }
 
 
