@@ -15,11 +15,11 @@ I have no mac so no .au builds yet.
 - Added resampling mode: when the "resample" switch is turned on, the played note is always C-3, but the "replay speed" is changed so it plays at correct pitch.
 This mimics the "drum track" mode, which sampled one note and then replayed the sample at various pitches.
 
-  For extra grittiness, turn off the "oversample switch" (which does 4x oversampling). Note that oversampling has tobe done independently on "resampling" switch in order to convert from Nintendo DS audio frequency (32768 Hz) to host frequency and turning off oversampling switch lowers audio quality.
+  For extra grittiness, turn off the "oversample switch" (which does 4x oversampling). Note that oversampling is done no matter the "resampling" switch in order to convert from Nintendo DS audio frequency (32768 Hz) to host frequency. Turning off oversampling lowers audio quality.
   
-  **Warning**: replaying at higher pitches than C3 causes high CPU usage (for example, at C5 the synth has to run at 4x the speed).
+  **Warning**: replaying at higher pitches than C3 with resampling on causes high CPU usage (for example, at C5 the synth has to run at 4x the speed).
 
-  **Note**: polyphony doesn't work well in "resample mode". There's also extra knob that just pitches down the replayed synth. This works well with polyphony.
+  **Note**: polyphony doesn't work well in "resample mode". There's extra knob that just pitches down the replayed synth, which works well with polyphony.
 
 - no effects (yet)
 
