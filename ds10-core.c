@@ -92,8 +92,9 @@ static double
 midi_to_gain(int midi)
 {
 	double v = (double)midi / 0x7f;
-	return v * v;
+	return v;
 }
+
 static void
 ds10_noteon_voice(Ds10State *dss, int voice, int key, int vel)
 {
@@ -167,10 +168,24 @@ static void pr_steal_voice(Ds10State *dss, Pressed *pr, int *pv)
 	pr->has_voice = 0;
 }
 
+int
+translate_note(int *note)
+{
+	/* shift two octaves down */
+	*note -= 24;
+	if (note < 0)
+		return 0;
+	return 1;
+}
+
 void
 ds10_noteon(Ds10State *dss, int note, int velocity)
 {
 	int v = -1;
+
+	if (!translate_note(&note))
+		return;
+
 	/* ignore noteons if we reached a limit */
 	if (dss->n_pressed >= MaxPressed)
 		return;
@@ -197,6 +212,9 @@ void
 ds10_noteoff(Ds10State *dss, int note)
 {
 	int recyclable_voices = 0;
+
+	if (!translate_note(&note))
+		return;
 	/* find a voice holding this key */
 	for (int i = dss->n_pressed - 1; i >= 0; i--) {
 		Pressed *pr = &dss->pressed[i];
