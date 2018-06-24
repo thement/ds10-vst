@@ -49,6 +49,10 @@ struct Ds10State {
 	int in_buf, in_ptr;
 	int ds10_polyphony;
 
+	int pitch_by_resample, resample_note;
+	double ratio;
+	int oversample;
+
 	Pressed pressed[MaxPressed];
 	int used_voices[MaxVoices];
 	double volume[MaxVoices];

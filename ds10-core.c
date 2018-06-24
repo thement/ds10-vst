@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "ds10-core.h"
 
+static void adjust_resampler(Ds10State *dss);
 
 static void
 writel(MemState *ms, uint32_t addr, uint32_t val)
@@ -101,6 +102,8 @@ ds10_noteon_voice(Ds10State *dss, int voice, int key, int vel)
 	const DsDevice *dev = &devices[0];
 	if (voice >= MaxVoices)
 		return;
+	if (dss->pitch_by_resample)
+		key = 36;
 
 	MemState *ms = &dss->mem_state[voice];
 	dss->volume[voice] = midi_to_gain(vel);
@@ -169,8 +172,17 @@ static void pr_steal_voice(Ds10State *dss, Pressed *pr, int *pv)
 }
 
 int
-translate_note(int *note)
+translate_note(Ds10State *dss, int *note)
 {
+	/* detect if we are pitching by resampling */
+	if (*note < 0) {
+		dss->pitch_by_resample = 1;
+		*note = -*note;
+		dss->resample_note = *note;
+	}
+	else {
+		dss->pitch_by_resample = 0;
+	}
 	/* shift two octaves down */
 	*note -= 24;
 	if (note < 0)
@@ -183,7 +195,7 @@ ds10_noteon(Ds10State *dss, int note, int velocity)
 {
 	int v = -1;
 
-	if (!translate_note(&note))
+	if (!translate_note(dss, &note))
 		return;
 
 	/* ignore noteons if we reached a limit */
@@ -206,6 +218,8 @@ ds10_noteon(Ds10State *dss, int note, int velocity)
 	pr->note = note;
 	pr->velocity = velocity;
 	pr_assign_voice(dss, pr, v);
+
+	adjust_resampler(dss);
 }
 
 void
@@ -213,7 +227,7 @@ ds10_noteoff(Ds10State *dss, int note)
 {
 	int recyclable_voices = 0;
 
-	if (!translate_note(&note))
+	if (!translate_note(dss, &note))
 		return;
 	/* find a voice holding this key */
 	for (int i = dss->n_pressed - 1; i >= 0; i--) {
@@ -293,10 +307,21 @@ ds10_exit(Ds10State *dss)
 	free(dss);
 }
 
+static void
+adjust_resampler(Ds10State *dss)
+{
+	double ratio = dss->ratio;
+	if (dss->pitch_by_resample)
+		ratio *= pow(2, (dss->resample_note - 60) / 12.0);
+	resamp_reset(&dss->resampler, dss->oversample, ratio);
+}
+
 void
 ds10_set_resampler(Ds10State *dss, int oversample, double sampling_rate, double extra_ratio)
 {
-	resamp_reset(&dss->resampler, oversample, 32768.0 / sampling_rate * extra_ratio);
+	dss->oversample = oversample;
+	dss->ratio = 32768.0 / sampling_rate * extra_ratio;
+	adjust_resampler(dss);
 	printf("over=%d rate=%lf extra_ratio=%lf\n", oversample, sampling_rate, extra_ratio);
 }
 

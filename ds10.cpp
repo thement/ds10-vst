@@ -18,11 +18,12 @@ const int kNumPrograms = 32;
 
 enum EParams
 {
-	kNumParams = 26 + 7 - 1 + 2,
+	kNumParams = 26 + 7 - 1 + 3,
 	kMetaParams = 31,
 	mPolySwitch = 31,
 	mOversampleSwitch,
 	mDistractKnob,
+	mResampleSwitch,
 };
 
 typedef struct Property Property;
@@ -88,6 +89,7 @@ const Property parameterProperties[kNumParams] = {
 	{ PVoices4, "poly",		19, 712,	-1,	0, 0, 3		},
 	{ PSwitch2,	"oversample",368, 700,	-1, 0, 0, 1		},
 	{ PKnob,	"distract",	432, 696,	-1, 127, 0, 127	},
+	{ PSwitch2,	"resample",	226, 700,	-1, 1, 0, 1		},
 };
 
 enum ELayout
@@ -107,6 +109,7 @@ ds10::ds10(IPlugInstanceInfo instanceInfo) : IPLUG_CTOR(kNumParams, kNumPrograms
   ds10state = ds10_init();
   mOversample = 1;
   mExtraRatio = 1;
+  mPitchByResampling = 0;
   mSampleRate = 44100;
   
 
@@ -124,10 +127,16 @@ ds10::~ds10() {
 
 
 void ds10::onNoteOn(int noteNumber, int velocity) {
+	if (mPitchByResampling) {
+		noteNumber = -noteNumber;
+	}
 	ds10_noteon(ds10state, noteNumber, velocity);
 }
 
 void ds10::onNoteOff(int noteNumber, int velocity) {
+	if (mPitchByResampling) {
+		noteNumber = -noteNumber;
+	}
 	ds10_noteoff(ds10state, noteNumber);
 }
 
@@ -277,6 +286,10 @@ void ds10::OnParamChange(int paramIdx)
 	  break;
   case mOversampleSwitch:
 	  mOversample = !param->Int();
+	  SetSampleRate();
+	  break;
+  case mResampleSwitch:
+	  mPitchByResampling = !param->Int();
 	  SetSampleRate();
 	  break;
   case mDistractKnob:

@@ -43,6 +43,7 @@ private:
   int mOversample;
   double mSampleRate;
   double mExtraRatio;
+  int mPitchByResampling;
   IControl* mVirtualKeyboard;
   void processVirtualKeyboard();
 
