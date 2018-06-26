@@ -35,4 +35,7 @@ This mimics the "drum track" mode, which sampled one note and then replayed the 
 
 ![alt text](screenshot.png "Screenshot")
 
+## Contact
+
+In case of any questions, contact me at thement at ibawizard dot net
 
